@@ -113,7 +113,7 @@ export async function createDoctor(req, res) {
         });
         await doc.save();
         const secret = process.env.JWT_SECRET;
-        if(!secret) {
+        if (!secret) {
             console.warn("JWT Secret is not define");
             return res.status(500).json({
                 success: false,
@@ -126,7 +126,287 @@ export async function createDoctor(req, res) {
             role: "doctor"
         }, secret, { expiresIn: "7d" });
 
-    } catch (error) {
+        const out = normalizeDocForClient(doc.toObject());
+        delete out.password;
 
+        return res.status(201).json({
+            success: true,
+            data: out,
+            token
+        });
+
+    } catch (err) {
+        console.error("CreateDoctor error:", err);
+        return res.status(500).json({
+            success: false,
+            message: "Server Error"
+        })
+
+
+    }
+}
+
+// to get Doctor
+
+export const getDoctors = async (req, res) => {
+    try {
+        const { q = "", limit: limitRaw = 200, page: pageRaw = 1 } = req.query;
+        const limit = Math.min(500, Math.max(1, parseInt(limitRaw, 10) || 200));
+        const page = Math.max(1, parseInt(pageRaw, 10) || 1);
+        const skip = (page - 1) * limit;
+
+        const match = {};
+        if (q && typeof q === "string" && q.trim()) {
+            const re = new RegExp(q.trim(), "i");
+            match.$or = [{ name: re }, { specialization: re }, { speciality: re }, { email: re }];
+        }
+
+        const docs = await Doctor.aggregate([
+            { $match: match },
+            {
+                $lookup: {
+                    from: "appointments",
+                    localField: "_id",
+                    foreignField: "doctorId",
+                    as: "appointments",
+                },
+            },
+            {
+                $addFields: {
+                    appointmentsTotal: { $size: "$appointments" },
+                    appointmentsCompleted: {
+                        $size: {
+                            $filter: { input: "$appointments", as: "a", cond: { $in: ["$$a.status", ["Confirmed", "Completed"]] } }
+                        }
+                    },
+                    appointmentsCanceled: {
+                        $size: {
+                            $filter: { input: "$appointments", as: "a", cond: { $eq: ["$$a.status", "Canceled"] } }
+                        }
+                    },
+                    earnings: {
+                        $sum: {
+                            $map: {
+                                input: {
+                                    $filter: { input: "$appointments", as: "a", cond: { $in: ["$$a.status", ["Confirmed", "Completed"]] } }
+                                },
+                                as: "p",
+                                in: { $ifNull: ["$$p.fees", 0] }
+                            }
+                        }
+                    }
+                }
+            },
+            { $project: { appointments: 0 } },
+            { $sort: { name: 1 } },
+            { $skip: skip },
+            { $limit: limit }
+        ]);
+
+        const normalized = docs.map((d) => ({
+            _id: d._id,
+            id: d._id,
+            name: d.name || "",
+            specialization: d.specialization || d.speciality || "",
+            fee: d.fee ?? d.fees ?? d.consultationFee ?? 0,
+            imageUrl: d.imageUrl || d.image || d.avatar || null,
+            appointmentsTotal: d.appointmentsTotal || 0,
+            appointmentsCompleted: d.appointmentsCompleted || 0,
+            appointmentsCanceled: d.appointmentsCanceled || 0,
+            earnings: d.earnings || 0,
+            availability: d.availability ?? "Available",
+            schedule: (d.schedule && typeof d.schedule === "object") ? d.schedule : {},
+            patients: d.patients ?? "",
+            rating: d.rating ?? 0,
+            about: d.about ?? "",
+            experience: d.experience ?? "",
+            qualifications: d.qualifications ?? "",
+            location: d.location ?? "",
+            success: d.success ?? "",
+            raw: d,
+        }));
+
+        const total = await Doctor.countDocuments(match); // total number of doctors in DB
+        return res.json({ success: true, data: normalized, doctors: normalized, meta: { page, limit, total } });
+    } catch (err) {
+        console.error("getDoctors:", err);
+        return res.status(500).json({ success: false, message: "Server error" });
+    }
+};
+
+// to get doctoe by id ie to fetch one doctor
+export async function getDoctorById(req, res) {
+    try {
+        const { id } = req.params;
+        // const doc = await Doctor.findById(id).select("-password").Iean();
+        const doc = await Doctor.findById(id).select("-password").lean();
+        if (!doc) return res.status(404).json({
+            success: false,
+            message: "doctor not found"
+        });
+
+        return res.json({ success: true, data: normalizeDocForClient(doc) });
+    } catch (err) {
+        console.error("getDoctorById error:", err);
+        return res.status(500).json({ success: false, message: "Server error" });
+    }
+}
+
+// to  update a doctor
+
+export async function updateDoctor(req, res) {
+    try {
+        const { id } = req.params;
+        const body = req.body || {};
+
+        if (!req.doctor || String(req.doctor._id || req.doctor.id) !== String(id)) {
+            return res.status(403).json({ success: false, message: "Not authorized to update this doctor" });
+        }
+
+        const existing = await Doctor.findById(id);
+        if (!existing) return res.status(404).json({ success: false, message: "Doctor not found" });
+
+        // if exists then update the image else show a warning
+        if (req.file?.path) {
+            const uploaded = await uploadToCloudinary(req.file.path, "doctors");
+            if (uploaded) {
+                const previousPublicId = existing.imagePublicId;
+                existing.imageUrl = uploaded.secure_url || uploaded.url || existing.imageUrl;
+                existing.imagePublicId = uploaded.public_id || uploaded.publicId || existing.imagePublicId;
+                if (previousPublicId && previousPublicId !== existing.imagePublicId) {
+                    deleteFromCloudinary(previousPublicId).catch((e) => console.warn("deleteFromCloudinary warning:", e?.message || e));
+                }
+            }
+        } else if (body.imageUrl) {
+            existing.imageUrl = body.imageUrl;
+        }
+
+        if (body.schedule) existing.schedule = parseScheduleInput(body.schedule);
+
+        const updatable = ["name", "specialization", "experience", "qualifications", "location", "about", "fee", "availability", "success", "patients", "rating"];
+        updatable.forEach((k) => { if (body[k] !== undefined) existing[k] = body[k]; });
+
+        if (body.email && body.email !== existing.email) {
+            const other = await Doctor.findOne({ email: body.email.toLowerCase() });
+            if (other && other._id.toString() !== id) return res.status(409).json({ success: false, message: "Email already in use" });
+            existing.email = body.email.toLowerCase();
+        }
+
+        if (body.password) existing.password = body.password;
+
+        await existing.save();
+        const out = normalizeDocForClient(existing.toObject());
+        delete out.password;
+        return res.json({ success: true, data: out });// updated data
+    } catch (err) {
+        console.error("updateDoctor error:", err);
+        return res.status(500).json({ success: false, message: "Server error" });
+    }
+}
+
+// to delete a doctor
+export async function deleteDoctor(req, res) {
+    try {
+        const { id } = res.params;
+        const existing = await Doctor.findById(id);
+        if (!existing) return res.status(404).json({
+            success: false,
+            message: "Doctor not found."
+        });
+
+        if (existing.imagePublicId) {
+            try {
+                await deleteFromCloudinary(existing.imagePublicId);
+
+            } catch (e) {
+                console.warn("DeleteFromCloudinary warning:", e?.message || e);
+            }
+        }
+
+        await Doctor.findByIdAndDelete(id);
+        return res.json({ success: true, message: "Doctor Remove" });
+    }
+
+    catch (err) {
+        console.error("deleteDoctor error:", err);
+        return res.status(500).json({ success: false, message: "Server error" });
+
+    }
+}
+
+// to toggle Availability
+export async function toggleAvailability(req, res) {
+    try {
+        const { id } = req.params;
+
+
+        if (!req.doctor || String(req.doctor._id || req.doctor.id) !== String(id)) {
+            return res.status(403).json({ success: false, message: "Not authorized to update this doctor's availability" });
+        }
+
+        const doc = await Doctor.findById(id);
+        if (!doc) return res.status(404).json({
+            success: false,
+            message: "Doctor not found"
+        });
+
+        if (typeof doc.availability === 'boolean') doc.availability = !doc.availability;
+        else doc.availability = doc.availability === "Available" ?
+            "Unavailable" : "Available";
+
+        await doc.save();
+        const out = normalizeDocForClient(doc.toObject());
+        delete out.password;
+        return res.json({ success: true, data: out });
+
+    } catch (err) {
+        console.error("toogleAvailability error:", err);
+        return res.status(500).json({ success: false, message: "Server error" });
+
+    }
+}
+
+// to login the doctor
+export async function doctorLogin(req, res) {
+    try {
+        const { email, password } = req.body || {};
+        // if (!email || password) return res.status(404).json({
+        if (!email || !password) return res.status(404).json({
+            success: false,
+            message: "Email and Password are req"
+        });
+
+        const doc = await Doctor.findOne({ email: email.toLowerCase() }).select("password");
+        if (!doc) return res.status(401).json({
+            success: false,
+            message: "Invalid Creds"
+        });
+
+        if (doc.password !== password) return res.status(401).json({
+            success: false,
+            message: "Invaild Creds"
+        });
+
+        const secret = process.env.JWT_SECRET;
+        if (!secret) return res.status(500).json({
+            success: false,
+            message: "Server Misconfigured"
+        });
+
+        const token = jwt.sign({
+            id: doc._id.toString(), email: doc.email,
+            role: "doctor"
+        }, secret, { expiresIn: "7d" });
+
+        // const ot = doc.toObject();
+        // delete out.password;
+        // return res.json({ success: true, token, data: out });
+        const out = doc.toObject();
+        delete out.password;
+        return res.json({ success: true, token, data: out });
+
+    } catch (err) {
+        console.error("Login error:", err);
+        return res.status(500).json({ success: false, message: "Server error" });
     }
 }
