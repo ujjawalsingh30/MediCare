@@ -1,7 +1,8 @@
 import express from 'express';
 import multer from 'multer';
 
-import { createDoctor, doctorLogin, getDoctorById, getDoctors, toggleAvailability, updateDoctor } from '../controllers/doctorController.js';
+// import { createDoctor, doctorLogin, getDoctorById, getDoctors, toggleAvailability, updateDoctor } from '../controllers/doctorController.js';
+import { createDoctor, doctorLogin, getDoctorById, getDoctors, toggleAvailability, updateDoctor, deleteDoctor } from '../controllers/doctorController.js';
 
 import doctorAuth from '../middlewares/doctorAuth.js';
 
