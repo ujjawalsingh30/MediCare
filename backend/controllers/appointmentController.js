@@ -504,7 +504,7 @@ export const getStats = async (req, res) => {
 export const getAppointmentsByDoctor = async (req, res) => {
     try {
         const { doctorId } = req.params;
-        if (!doctorId) return res, staus(400).json({
+        if (!doctorId) return res.status(400).json({
             succes: false,
             message: "Doctor Id required"
         });
