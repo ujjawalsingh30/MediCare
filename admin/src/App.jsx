@@ -2,7 +2,8 @@ import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Hero from './pages/Hero';
 import { Link } from 'react-router-dom';
-import { Home } from 'lucide-react';
+// import { Home } from 'lucide-react';
+import Home from './pages/Home';
 import { useUser } from '@clerk/clerk-react';
 
 function RequireAuth({ children }) {
