@@ -15,7 +15,9 @@ appointementRouter.post('/', clerkMiddleware(), requireAuth(), getAppointmentsBy
 appointementRouter.get("/doctor/:doctorId", getAppointmentsByDoctor);
 
 appointementRouter.post("/:id/cancel", cancleAppointment);
-appointementRouter.post("/paitents/count", getResisteredUserCount);
+// appointementRouter.post("/paitents/count", getResisteredUserCount);
+// appointementRouter.get("/patients/count", getResisteredUserCount);
+appointementRouter.get("/patients/count", getResisteredUserCount);
 appointementRouter.post("/:id", updateAppointment);
 
 export default appointementRouter;

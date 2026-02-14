@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { dashboardStyles as s } from '../assets/dummyStyles';
 
-import { CheckCircle, Users, XCircle, UserRoundCheck, CalendarRange, BadgeIndianRupee } from 'lucide-react';
+import { CheckCircle, Users, XCircle, UserRoundCheck, CalendarRange, BadgeIndianRupee, Search } from 'lucide-react';
 
 const API_BASE = 'http://localhost:4000';
 const PATIENT_COUNT_API = `${API_BASE}/api/appointments/patients/count`;
@@ -272,8 +272,135 @@ const DashboardPage = () => {
                     />
                 </div>
 
+                <div className='mb-6'>
+                    <label className={s.searchLabel}>Search Doctors</label>
+                    <div className={s.searchContainer}>
+                        <div className={s.searchInputContainer}>
+                            <input type={query} onChange={(e) => setQuery(e.target.value)}
+                                className={s.searchInput}
+                                placeholder='Search name / Specialization /fee'
+                            />
+                            <Search className={s.searchIcon} />
+                        </div>
+                        <button onClick={() => {
+                            setQuery("");
+                            setShowAll(false);
+                        }}
+                            className={s.clearButton + " " + s.cursorPointer}>
+                            Clear
+                        </button>
+                    </div>
+                </div>
 
-                
+                <div className={s.tableContainer}>
+                    <div className={s.tableHeader}>
+                        <h2 className={s.tableTitle}>Doctors</h2>
+                        <p className={s.tableCount}>
+                            {loading ? "Loading.." :
+                                `Showing ${visibleDoctors.length} of ${filteredDoctors.length}`}
+                        </p>
+                    </div>
+
+                    {error && (
+                        <div className={s.errorContainer}>
+                            Error loading doctors: {error}
+
+                        </div>
+                    )}
+
+                    <div className={s.tableWrapper}>
+                        <table className={s.table}>
+
+                            <thead className={s.tableHead}>
+                                <tr>
+                                    <th className={s.tableHeaderCell}>Doctor</th>
+                                    <th className={s.tableHeaderCell}>Specialization</th>
+                                    <th className={s.tableHeaderCell}>Fee</th>
+                                    <th className={s.tableHeaderCell}>Appointments</th>
+                                    <th className={s.tableHeaderCell}>Completed</th>
+                                    <th className={s.tableHeaderCell}>Canceled</th>
+                                    <th className={s.tableHeaderCell}>Total Earnings</th>
+                                </tr>
+                            </thead>
+
+
+                            <tbody className={s.tableBody}>
+                                {visibleDoctors.map((d, idx) => (
+                                    <tr
+                                        key={d.id}
+                                        className={s.tableRow + " " +
+                                            (idx % 2 === 0 ? s.tableRowEven : s.tableRowOdd)}
+                                    >
+                                        <td className={s.tableCell + " " + s.tableCellFlex}>
+                                            <div className={s.verticalLine} />
+                                            <img
+                                                src={d.image}
+                                                alt={d.name}
+                                                className={s.doctorImage}
+                                            />
+                                            <div>
+                                                <div className={s.doctorName}>
+                                                    {d.name}
+                                                </div>
+                                                <div className={s.doctorId}>
+                                                    ID: {d.id}
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td className={s.tableCell + " " + s.doctorSpecialization}>
+                                            {d.specialization}
+                                        </td>
+
+                                        <td className={s.tableCell + " " + s.feeText}>
+                                            ₹ {d.fee}
+                                        </td>
+
+                                        <td className={s.tableCell + " " + s.appointmentsText}>
+                                            {d.appointments.total}
+                                        </td>
+
+                                        <td className={s.tableCell + " " + s.completedText}>
+                                            {d.appointments.completed}
+                                        </td>
+
+                                        <td className={s.tableCell + " " + s.canceledText}>
+                                            {d.appointments.canceled}
+                                        </td>
+
+                                        <td className={s.tableCell + " " + s.earningsText}>
+                                            ₹ {d.earnings.toLocaleString()}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                    <div className={s.mobileDoctorContainer}>
+                        <div className={s.mobileDoctorGrid}>
+                            {visibleDoctors.map((d) => (
+                                <MobileDoctorCard key={d.id} d={d} />
+                            ))}
+
+                        </div>
+                    </div>
+
+                    {filteredDoctors.length > INITIAL_COUNT && (
+                        <div className={s.showMoreButton}>
+                            <button onClick={() => setShowAll((s) => !s)}
+                                className={s.showMoreButton + " " + s.cursorPointer}>
+                                {showAll
+                                    ? "Show less"
+                                    : `Show more (${filteredDoctors.length - INITIAL_COUNT})`
+                                }
+                            </button>
+
+                        </div>
+                    )}
+
+                </div>
             </div>
         </div>
     )
@@ -281,7 +408,7 @@ const DashboardPage = () => {
 
 export default DashboardPage;
 
-function StatCars ({icon, label,value}) {
+function StatCars({ icon, label, value }) {
     return (
         <div className={s.statCard}>
             <div className={s.statCardContent}>
@@ -293,5 +420,56 @@ function StatCars ({icon, label,value}) {
                 </div>
             </div>
         </div>
+    );
+}
+
+
+function MobileDoctorCard({ d }) {
+
+    return (
+
+        <div className={s.mobileDoctorCard}>
+            <div className={s.mobileDoctorHeader}>
+                <div className="flex items-center gap-3">
+                    <img src={d.image} alt={d.name} className={s.mobileDoctorImage} />
+                    <div className={s.mobileDoctorName}>{d.name}</div>
+                    <div className={s.mobileDoctorSpecialization}>
+                        {d.specialization}
+                    </div>
+                </div>
+            </div>
+            <div className={s.mobileDoctorFee}>{d.fee}</div>
+
+            <div className={s.mobileStatsGrid}>
+                <div>
+                    {/* <div className={s.mobileStatLabel}>{Appts}</div> */}
+                    <div className={s.mobileStatLabel}>Appts</div>
+                    {/* <div className={s.mobileStatValue}>{d.appointment.total}</div> */}
+                    <div className={s.mobileStatValue}>{d.appointments.total}</div>
+                </div>
+
+
+                <div>
+                    <div className={s.mobileStatLabel}>Done</div>
+                    <div className={s.mobileStatValue + " " + s.textEmerald600}>{d.appointments.completed}</div>
+                </div>
+
+
+
+                <div>
+                    <div className={s.mobileStatLabel}>Cancel</div>
+                    {/* <div className={s.mobileStatValue + " " + s.textRose500}>{d.appointment.canceled}</div> */}
+                    <div className={s.mobileStatValue + " " + s.textRose500}>{d.appointments.canceled}</div>
+                </div>
+            </div>
+            <div className={s.mobileEarningsContainer}>
+                <div>Earned</div>
+                <div className='font-semibold'> ₹ {d.earnings.toLocaleString()}</div>
+
+            </div>
+
+        </div>
+
     )
+
 }
