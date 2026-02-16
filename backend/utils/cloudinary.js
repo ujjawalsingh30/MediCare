@@ -1,5 +1,6 @@
 import { v2 as cloudinary } from 'cloudinary';
 import fs from 'fs';
+import upload from '../middlewares/multer.js';
 
 // config cloundinary
 cloudinary.config({
@@ -11,7 +12,7 @@ cloudinary.config({
 //to upload files to cloudinary
 export async function uploadToCloudinary(filePath, folder = "Doctor") {
     try {
-        const result = await cloudinary.upload.upload(filePath, {
+        const result = await cloudinary.uploader.upload(filePath, {
             folder,
             resource_type: "image"
         });
@@ -21,7 +22,7 @@ export async function uploadToCloudinary(filePath, folder = "Doctor") {
         return result;
     
     } 
-    catch (error) {
+    catch (err) {
         console.log("Cloudinary upload error:", err);
         throw err;
         
@@ -33,7 +34,7 @@ export async function deleteFromCloudinary(PublicId){
     try {
         if (!PublicId) return;
         await cloudinary.upload.destroy(PublicId);
-    } catch (error) {
+    } catch (err) {
         console.log("Cloudinary delete error:", err);
         throw err;
         
