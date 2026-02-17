@@ -6,7 +6,7 @@ const Appointments = () => {
   return (
     <div>
 <Navbar/>
-<Appointments/>
+<AppointmentsPage/>
     </div>
   )
 }

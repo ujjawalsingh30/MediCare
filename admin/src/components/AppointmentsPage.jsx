@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { pageStyles, statusClasses, keyframesStyles } from '../assets/dummyStyles'
+import { Calendar, Search } from 'lucide-react';
 
 const API_BASE = "http://localhost:4000";
 
@@ -59,6 +60,7 @@ const AppointmentsPage = () => {
                 const q = query.trim();
                 const url = `${API_BASE}/api/appointments?limit=200${q ? `&search=${encodeURIComponent(q)}` : ""
                     }`;
+
                 const res = await fetch(url);
                 if (!res.ok) {
                     const body = await res.json().catch(() => ({}));
@@ -155,6 +157,7 @@ const AppointmentsPage = () => {
             statusLower === "canceled" || statusLower === "cancelled";
         const isCompleted = statusLower === "completed";
 
+        // dont allow cancel or complete to be overdone
         if (isCancelled || isCompleted) return;
 
         const ok = window.confirm(
@@ -226,12 +229,53 @@ const AppointmentsPage = () => {
                     setAppointments(items);
                 }
             } catch (e) {
+                //ignore any errors if occur
             }
         }
     }
 
     return (
-        <div>
+        <div className={pageStyles.container}>
+            <style>{keyframesStyles}</style>
+            <div className={pageStyles.maxWidthContainer}>
+                <header className={pageStyles.headerContainer}>
+                    <div className={pageStyles.headerTitleSection}>
+                        <h1 className={pageStyles.headerTitle}>Appointments</h1>
+                        <p className={pageStyles.headerSubtitle}>
+                            Mnage and search upcoming patient appointments
+                        </p>
+                    </div>
+
+                    <div className={pageStyles.headerControlsSection}>
+                        <div className='flex flex-col md:flex-col sm:flex-row items-center gap-3 w-full sm:w-auto'>
+                            <div className={pageStyles.searchContainer}>
+                                <Search size={16} className={pageStyles.searchIcon} />
+                                <input className={pageStyles.searchIcon}
+                                    placeholder='Search doctor, patient, speciality or mobile' value={query}
+                                    onChange={(e) => setQuery(e.target.value)} />
+                            </div>
+
+                            <div className={pageStyles.filterContainer}>
+                                <div className={pageStyles.dateFilter}>
+                                    <Calendar size={14} className={pageStyles.dateFilterIcon} />
+                                    <input type="data" className={pageStyles.dateInput} value={filterDate}
+                                        onChange={(e) => setFilterDate(e.target.value)} />
+
+                                </div>
+                                <select className={pageStyles.selectFilter}
+                                    value={filterSpeciality} onChange={(e) => setFilterSpeciality(e.target.value)}>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </header>
+
+            </div>
 
         </div>
     )
