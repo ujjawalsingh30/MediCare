@@ -105,7 +105,8 @@ export async function createDoctor(req, res) {
             qualifications: body.qualifications || "",
             location: body.location || "",
             about: body.about || "",
-            fee: body.fee !== undefined ? Number(body.fee) : 0,
+            // fee: body.fee !== undefined ? Number(body.fee) : 0,
+            fee: !isNaN(Number(body.fee)) ? Number(body.fee) : 0,
             schedule,
             success: body.success || "",
             patients: body.patients || "",
@@ -237,6 +238,7 @@ export const getDoctors = async (req, res) => {
 // to get doctoe by id ie to fetch one doctor
 export async function getDoctorById(req, res) {
     try {
+        // const { id } = req.params;
         const { id } = req.params;
         // const doc = await Doctor.findById(id).select("-password").Iean();
         const doc = await Doctor.findById(id).select("-password").lean();
@@ -305,9 +307,14 @@ export async function updateDoctor(req, res) {
 }
 
 // to delete a doctor
+// export async function deleteDoctor(req, res) {
+//     try {
+//         const { id } = res.params;
+
 export async function deleteDoctor(req, res) {
     try {
-        const { id } = res.params;
+        const { id } = req.params;
+
         const existing = await Doctor.findById(id);
         if (!existing) return res.status(404).json({
             success: false,
