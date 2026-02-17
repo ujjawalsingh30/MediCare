@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import { useUser } from '@clerk/clerk-react';
 import Add from './pages/Add';
 import List from "./pages/List";
+import Appointments from './pages/Appointments';
 
 // import { List } from 'lucide-react';
 
@@ -28,7 +29,7 @@ function RequireAuth({ children }) {
           </p>
           <div className='flex justify-center'>
             <Link to="/"
-            className='px-4 py-2 text-sm rounded-full bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 hover:shadow-md transition-all duration-300 ease-in-out animate-bounce-subtle'>
+              className='px-4 py-2 text-sm rounded-full bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 hover:shadow-md transition-all duration-300 ease-in-out animate-bounce-subtle'>
               HOME
             </Link>
 
@@ -50,21 +51,23 @@ const App = () => {
           path="/h"
           element={
             <RequireAuth>
-              <Home/>
+              <Home />
             </RequireAuth>
           }
         />
         <Route path='/add' element={<RequireAuth>
-          <Add/>
-        </RequireAuth>}/>
-{/* <Route path='/list' element={<RequireAuth>
+          <Add />
+        </RequireAuth>} />
+        {/* <Route path='/list' element={<RequireAuth>
   <List/>
 </RequireAuth>} /> */}
 
-<Route path='/list' element={<RequireAuth>
-  <List/>
-</RequireAuth>} />
-
+        <Route path='/list' element={<RequireAuth>
+          <List />
+        </RequireAuth>} />
+<Route path='/appointments' element={<RequireAuth>
+  <Appointments/>
+</RequireAuth>}/>
 
       </Routes>
 
