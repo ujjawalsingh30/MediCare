@@ -172,6 +172,7 @@ const AppointmentsPage = () => {
             );
             setShowAll(true);
 
+            // const res = await fetch(`${API_BASE}/api/appointments/${id}/cancel`, {
             const res = await fetch(`${API_BASE}/api/appointments/${id}/cancel`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -203,6 +204,7 @@ const AppointmentsPage = () => {
             console.error("Cancel error:", err);
             setError(err.message || "Failed to cancel appointment");
             try {
+                // const reload = await fetch(`${API_BASE}/api/appointments?limit=200`);
                 const reload = await fetch(`${API_BASE}/api/appointments?limit=200`);
                 if (reload.ok) {
                     const body = await reload.json();
@@ -250,7 +252,8 @@ const AppointmentsPage = () => {
                         <div className='flex flex-col md:flex-col sm:flex-row items-center gap-3 w-full sm:w-auto'>
                             <div className={pageStyles.searchContainer}>
                                 <Search size={16} className={pageStyles.searchIcon} />
-                                <input className={pageStyles.searchIcon}
+                                {/* <input className={pageStyles.searchIcon} */}
+                                <input className={pageStyles.searchInput}
                                     placeholder='Search doctor, patient, speciality or mobile' value={query}
                                     onChange={(e) => setQuery(e.target.value)} />
                             </div>
@@ -258,22 +261,152 @@ const AppointmentsPage = () => {
                             <div className={pageStyles.filterContainer}>
                                 <div className={pageStyles.dateFilter}>
                                     <Calendar size={14} className={pageStyles.dateFilterIcon} />
-                                    <input type="data" className={pageStyles.dateInput} value={filterDate}
+                                    <input type="date" className={pageStyles.dateInput} value={filterDate}
                                         onChange={(e) => setFilterDate(e.target.value)} />
 
                                 </div>
                                 <select className={pageStyles.selectFilter}
                                     value={filterSpeciality} onChange={(e) => setFilterSpeciality(e.target.value)}>
+                                    {specialities.map((s) => (
+                                        <option value={s} key={s}>
+                                            {s === "All" ? "All Specialties" : s}
+                                        </option>
+                                    ))}
 
                                 </select>
 
+                                <button onClick={() => {
+                                    setQuery(""); setFilterDate("");
+                                    setFilterSpeciality("all");
+                                    setShowAll(false);
+                                    setError(null);
+                                }} className={pageStyles.clearButton}>
+                                    clear
+
+                                </button>
                             </div>
-
                         </div>
-
                     </div>
-
                 </header>
+
+                {loading ? (
+                    <div className={pageStyles.loadingErrorContainer}>Loading...</div>
+                ) : error ? (
+                    <div className={pageStyles.errorContainer}>{error}</div>
+                ) : sortedFiltered.length === 0 ? (
+                    <div className={pageStyles.noResultsContainer}>
+                        No appointmnets found.
+                    </div>
+                ) : (
+
+                    <main className={pageStyles.gridContainer}>
+                        {displayed.amp((a, idx) => {
+                            const statusLower = (e.status || "").toLowerCase();
+                            const isCancelled =
+                                statusLower === "canceled" || statusLower === "cancelled";
+                            const isCompleted = statusLower === "completed";
+                            const isDisabled = isCancelled || isCompleted;
+
+                            return (
+                                <div
+                                    key={a.id}
+                                    style={{
+                                        animation: `fadeUp 420ms cubic-bezier(.2,.9,.2,1) forwards`,
+                                        animationDelay: `${idx * 70}ms`,
+                                        opacity: 0,
+                                    }}
+                                    className={pageStyles.card}
+                                >
+                                    <div className={pageStyles.cardHeader}>
+                                        <div className="min-w-0">
+                                            <div className="flex flex-wrap items-center gap-2">
+                                                <h3 className={pageStyles.cardTitle}>
+                                                    {a.patientName}
+                                                </h3>
+
+                                                <div className={pageStyles.patientInfo}>
+                                                    <span>{a.age ? `${a.age} yrs` : ""}</span>
+                                                    <span> {a.age ? ":" : ""} </span>
+                                                    <span>{a.gender}</span>
+                                                    <span className="hidden md:inline"> : </span>
+                                                    <span className=" max-w-30">{a.mobile}</span>
+                                                </div>
+                                            </div>
+
+                                            <div className={pageStyles.doctorInfo}>
+                                                {a.doctorName} :{" "}
+                                                <span className={pageStyles.doctorSpeciality}>
+                                                    {a.speciality}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div className="text-right">
+                                            <div className={pageStyles.feeLabel}>
+                                                Fees
+                                            </div>
+                                            <div className={pageStyles.feeAmount}>
+                                                <BadgeIndianRupee size={16} />
+                                                <span>{a.fee}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center justify-between gap-3 flex-wrap">
+                                        <div className={pageStyles.slotContainer}>
+                                            <Calendar size={14} className={pageStyles.slotIcon} />
+                                            <span>
+                                                {formatDateISO(a.slot.date)} — {a.slot.time}
+                                            </span>
+                                        </div>
+
+                                        <div
+                                            className={`${pageStyles.statusBadge} ${statusClasses(a.status)}`}
+                                        >
+                                            {a.status ? a.status.toUpperCase() : "PENDING"}
+                                        </div>
+
+                                        <div className="flex items-center gap-2">
+                                            {isAdmin && (
+                                                <button
+                                                    onClick={() => adminCancelAppointment(a.id)}
+                                                    title={
+                                                        isDisabled
+                                                            ? isCompleted
+                                                                ? "Cannot cancel a completed appointment"
+                                                                : "Already cancelled"
+                                                            : "Admin Cancel (mark as cancelled)"
+                                                    }
+                                                    disabled={isDisabled}
+                                                    aria-disabled={isDisabled}
+                                                    className={pageStyles.cancelButton(isDisabled, isCompleted)}
+                                                >
+                                                    {isDisabled
+                                                        ? isCompleted
+                                                            ? "Completed"
+                                                            : "Admin Cancelled"
+                                                        : "Admin Cancel"}
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            )
+                        })}
+                    </main>
+                )}
+
+                {sortedFiltered.length > 8 && (
+                    <div className='flex justify-center mt-4'>
+                        <button onClick={() => setShowAll((s) => !s )}
+                            className={pageStyles.showMoreButton}>
+                                {showAll ? "Show Less" : `Show more (${sortedFiltered.length -8})`}
+
+                        </button>
+                        
+                    </div>
+                )}
+
 
             </div>
 
