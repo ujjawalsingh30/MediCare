@@ -9,6 +9,7 @@ import Add from './pages/Add';
 import List from "./pages/List";
 import Appointments from './pages/Appointments';
 import SerDashboard from './pages/SerDashboard';
+import AddSer from './pages/AddSer';
 
 // import { List } from 'lucide-react';
 
@@ -73,6 +74,10 @@ const App = () => {
         <Route path='/service-dashboard' element={<RequireAuth>
           <SerDashboard />
         </RequireAuth>} />
+
+        <Route path ="/add-service" element={<RequireAuth>
+          <AddSer/>
+          </RequireAuth>} />
 
       </Routes>
 
