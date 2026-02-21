@@ -44,7 +44,8 @@ connectDB();
 
 //Routes
 app.use('/api/doctors', doctorRouter);
-app.use("/api/service", serviceRouter);
+// app.use("/api/service", serviceRouter);
+app.use("/api/services", serviceRouter);
 app.use("/api/appointments", appointementRouter);
 app.use("/api/service-appointments", serviceAppointmentRouter);
 
