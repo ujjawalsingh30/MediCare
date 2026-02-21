@@ -20,7 +20,7 @@ const Banner = () => {
                         <div className={bannerStyles.leftContent}>
                             <div className={bannerStyles.headerBadgeContainer}>
                                 <div className={bannerStyles.stethoscopeContainer}>
-                                    <div className={bannerStyles.stethoscopeIcon}>
+                                    <div className={bannerStyles.stethoscopeInner}>
                                         <Stethoscope className={bannerStyles.stethoscopeIcon} />
                                     </div>
                                 </div>
@@ -29,7 +29,7 @@ const Banner = () => {
                                 <div className={bannerStyles.titleContainer}>
                                     <h1 className={bannerStyles.title}>
                                         Medi
-                                        <span className={bannerStyles.titleContainer}>
+                                        <span className={bannerStyles.titleGradient}>
                                             Care+
                                         </span>
                                     </h1>
@@ -88,39 +88,39 @@ const Banner = () => {
 
                                     </span>
                                 </div>
-
-                                <div className={bannerStyles.ctaButtonsContainer}>
-                                    <button onClick={() => navigate("/doctors")}
-                                        className={bannerStyles.bookButton} >
-                                        <div className={bannerStyles.bookButtonOverlay}></div>
-                                        <div className={bannerStyles.bookButtonContent}>
-                                            <Calendar className={bannerStyles.bookButtonIcon}/>
-                                            <span>Book Appointment Now</span>
-                                        </div>
-                                    </button>
-
-                                    <button onClick={() => (window.location.href = "tel:9185624268")}
-                                        className={bannerStyles.emergencyButton}>
-                                            <div className={bannerStyles.emergencyButtonContent}>
-                                                <Phone className={bannerStyles.emergencyButtonIcon}/>
-                                                <span>Emergency Call</span>
-                                            </div>
-                                    </button>
-                                </div>
                             </div>
 
-                            <div className={bannerStyles.rightImageSection}>
-                                <div className={bannerStyles.imageContainer}>
-                                    <div className={bannerStyles.imageFrame}>
-                                        <img src={banner} alt="banner" className={bannerStyles.image} />
-
+                            <div className={bannerStyles.ctaButtonsContainer}>
+                                <button onClick={() => navigate("/doctors")}
+                                    className={bannerStyles.bookButton} >
+                                    <div className={bannerStyles.bookButtonOverlay}></div>
+                                    <div className={bannerStyles.bookButtonContent}>
+                                        <Calendar className={bannerStyles.bookButtonIcon} />
+                                        <span>Book Appointment Now</span>
                                     </div>
+                                </button>
+
+                                <button onClick={() => (window.location.href = "tel:9185624268")}
+                                    className={bannerStyles.emergencyButton}>
+                                    <div className={bannerStyles.emergencyButtonContent}>
+                                        <Phone className={bannerStyles.emergencyButtonIcon} />
+                                        <span>Emergency Call</span>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className={bannerStyles.rightImageSection}>
+                            <div className={bannerStyles.imageContainer}>
+                                <div className={bannerStyles.imageFrame}>
+                                    <img src={banner} alt="banner" className={bannerStyles.image} />
 
                                 </div>
 
                             </div>
 
                         </div>
+
                     </div>
                 </div>
             </div>
