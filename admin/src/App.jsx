@@ -11,6 +11,8 @@ import Appointments from './pages/Appointments';
 import SerDashboard from './pages/SerDashboard';
 import AddSer from './pages/AddSer';
 import ListService from './pages/ListService';
+import ServiceAppointment from './pages/ServiceAppointment';
+
 
 // import { List } from 'lucide-react';
 
@@ -83,6 +85,14 @@ const App = () => {
 
           <Route path='/list-service' element={<RequireAuth>
             <ListService/>
+          </RequireAuth>} />
+
+
+          {/* <Route path='/service-appointment' element={<RequireAuth>
+            <ServiceAppointment/>
+          </RequireAuth>} /> */}
+          <Route path='service-appointments' element={<RequireAuth>
+            <ServiceAppointment/>
           </RequireAuth>} />
 
       </Routes>

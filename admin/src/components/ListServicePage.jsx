@@ -675,8 +675,8 @@ export default function ListServicePage() {
                         <button
                             onClick={() => setFilterMode("all")}
                             className={`${s.filterButton} ${filterMode === "all"
-                                    ? s.filterButtonActive
-                                    : s.filterButtonInactive
+                                ? s.filterButtonActive
+                                : s.filterButtonInactive
                                 } ${s.cursorPointer}`}
                             type="button"
                         >
@@ -685,8 +685,8 @@ export default function ListServicePage() {
                         <button
                             onClick={() => setFilterMode("available")}
                             className={`${s.filterButton} ${filterMode === "available"
-                                    ? s.filterButtonActive
-                                    : s.filterButtonInactive
+                                ? s.filterButtonActive
+                                : s.filterButtonInactive
                                 } ${s.cursorPointer}`}
                             type="button"
                         >
@@ -695,8 +695,8 @@ export default function ListServicePage() {
                         <button
                             onClick={() => setFilterMode("unavailable")}
                             className={`${s.filterButton} ${filterMode === "unavailable"
-                                    ? s.filterButtonActive
-                                    : s.filterButtonInactive
+                                ? s.filterButtonActive
+                                : s.filterButtonInactive
                                 } ${s.cursorPointer}`}
                             type="button"
                         >
@@ -755,8 +755,8 @@ export default function ListServicePage() {
                                             <div className={s.servicePrice}>₹{svc.price}</div>
                                             <div
                                                 className={`${s.availabilityBadge} ${svc.available
-                                                        ? s.availabilityAvailable
-                                                        : s.availabilityUnavailable
+                                                    ? s.availabilityAvailable
+                                                    : s.availabilityUnavailable
                                                     }`}
                                             >
                                                 {svc.available ? (
@@ -969,7 +969,7 @@ export default function ListServicePage() {
                                                             </select>
                                                         </div>
 
-                                                        <div className="flex-shrink-0">
+                                                        <div className="shrink-0">
                                                             <button
                                                                 onClick={() => removeSlot(slot.id)}
                                                                 className={s.removeSlotButton}
