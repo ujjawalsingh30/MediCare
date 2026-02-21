@@ -58,9 +58,31 @@ const Certification = () => {
                             OFFICIALLY CERTIFIED
                         </span>
                     </div>
+                </div>
 
+                <div className={certificationStyles.logosContainer}>
+                    <div className={certificationStyles.logosInner}>
+                        <div className={certificationStyles.logosFlexContainer}>
+                            <div className={certificationStyles.logosMarquee}>
+                                {duplicatedCertifications.map((cert, index) => (
+                                    <div key={`cert-${cert.id}-${index}`}
+                                        className={certificationStyles.logoItem}>
+                                        <div className='relative'>
+                                            <img src={cert.image} alt={cert.alt} className={certificationStyles.logoImage} />
+                                        </div>
+                                        <span className={certificationStyles.logoText}>
+                                            {cert.name}
+
+                                        </span>
+
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <style>{certificationStyles.animationStyles}</style>
         </div>
     )
 }
