@@ -1,6 +1,8 @@
-import React, { useEffect } from 'react'
+// import React, { useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+
 import { serviceAppointmentsStyles } from '../assets/dummyStyles'
-import { Loader2 } from 'lucide-react';
+import { Loader2, Search, SearchIcon, XIcon } from 'lucide-react';
 
 
 const API_BASE = "http://localhost:4000";
@@ -430,6 +432,7 @@ const ServiceAppointmentPage = () => {
         }
     }
 
+    // to reschedule the appointmnet for later but not on previous date
     async function rescheduleRemote(id, dateStr, time24) {
         const appt = appointments.find((a) => a.id === id);
         if (!appt) return;
@@ -515,6 +518,7 @@ const ServiceAppointmentPage = () => {
         }
     }
 
+    // to cancel any appt
     async function cancelRemote(id) {
         const appt = appointments.find((a) => a.id === id);
         if (!appt) return;
@@ -566,6 +570,7 @@ const ServiceAppointmentPage = () => {
         }
     }
 
+    // to filter
     const filtered = useMemo(() => {
         const q = debouncedSearch.toLowerCase();
         return appointments
@@ -590,6 +595,8 @@ const ServiceAppointmentPage = () => {
             return 0;
         }
     }
+
+    //sort that is upcoming date comes first
     const displayList = useMemo(() => {
         const copy = filtered.slice();
         copy.sort((x, y) => getTimestamp(y) - getTimestamp(x));
@@ -599,7 +606,240 @@ const ServiceAppointmentPage = () => {
 
 
     return (
-        <div>
+        <div className={serviceAppointmentsStyles.container}>
+            <header className={serviceAppointmentsStyles.headerContainer}>
+                <div className={serviceAppointmentsStyles.headerTitleContainer}>
+                    <h1 className={serviceAppointmentsStyles.headerTitle}>
+                        Appointments
+                    </h1>
+                    <p className={serviceAppointmentsStyles.headerSubtitle}>
+                        Mange patient bookings - quick search & status controls
+                    </p>
+                </div>
+
+                <div className={serviceAppointmentsStyles.searchContainer}>
+                    <div className={serviceAppointmentsStyles.searchInputWrapper}>
+                        <label className={serviceAppointmentsStyles.searchLabel}>
+                            <span className='sr-only'>
+                                Search Appointments
+                            </span>
+                            <div className='flex items-center gap-2 relative w-full'>
+                                <div className={serviceAppointmentsStyles.searchIconContainer}>
+                                    <SearchIcon
+                                        className={serviceAppointmentsStyles.searchIcon}>
+
+                                    </SearchIcon>
+                                </div>
+                                <input value={search} onChange={(e) => setSearch(e.target.value)}
+                                    placeholder='Search by patient or service...' className={serviceAppointmentsStyles.searchInput} />
+                                {search ? (
+                                    <button className={serviceAppointmentsStyles.clearSearchButton}
+                                        onClick={() => setSearch("")} >
+                                        <XIcon className={serviceAppointmentsStyles.clearSearchIcon} />
+
+                                    </button>
+                                ) : null}
+                            </div>
+                        </label>
+
+
+                        <select
+                            value={statusFilter}
+                            onChange={(e) => setStatusFilter(e.target.value)}
+                            className={serviceAppointmentsStyles.statusFilterSelect}
+                            title="Filter by status"
+                        >
+                            <option value="">All</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Confirmed">Confirmed</option>
+                            <option value="Rescheduled">Rescheduled</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Canceled">Canceled</option>
+                        </select>
+                    </div>
+                    <div className={serviceAppointmentsStyles.searchInfo}>
+                        <div>
+                            {displayList.length} result{displayList.length !== 1 ? "s" : ""}
+                        </div>
+                    </div>
+                    <button onClick={fetchAppointments} className={serviceAppointmentsStyles.refreshButton}>
+                        Refresh
+                    </button>
+
+                </div>
+            </header>
+
+            {loading ? (
+                <div className={serviceAppointmentsStyles.loadingContainer}>
+                    <Loader2 className='animate-spin' /> Loading appointments...
+                </div>
+            ) : error ? (
+                <div className={serviceAppointmentsStyles.errorContainer}>{error}</div>
+            ) : (
+                <div className={serviceAppointmentsStyles.gridContainer}>
+                    {displayList.length === 0 ? (
+                        <div className={serviceAppointmentsStyles.noResultsContainer}>
+                            <div className={serviceAppointmentsStyles.noResultsIcon}>
+                                <SearchIcon />
+                            </div>
+                            <div className={serviceAppointmentsStyles.noResultsText}>
+                                No appointments match your search
+                            </div>
+                            <div className={serviceAppointmentsStyles.noResultsSubtext}>
+                                Try a different patient name or service
+                            </div>
+                        </div>
+                    ) : (
+                        displayList.map((a) => {
+                            const isLocked = a.status === "Completed" || a.status === "Cancled";
+                            return (
+                                <article key={a.id} className={serviceAppointmentsStyles.article}>
+                                    <div className={serviceAppointmentsStyles.cardInner}>
+                                        <div>
+                                            <div className={serviceAppointmentsStyles.cardHeader}>
+                                                <div className={serviceAppointmentsStyles.patientInfoContainer}>
+                                                    <div className={serviceAppointmentsStyles.patientAvatar}>
+                                                        <User className={serviceAppointmentsStyles.patientAvatarIcon} />
+                                                    </div>
+
+                                                    <div>
+                                                        <div className={serviceAppointmentsStyles.patientName}>
+                                                            {a.patientName}
+                                                        </div>
+                                                        <div className={serviceAppointmentsStyles.patientDetails}>
+                                                            {a.gender} • {a.age} yrs
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className={serviceAppointmentsStyles.statusContainer}>
+                                                    <StatusBadge status={a.status} />
+                                                    <div className="mt-1">
+                                                        <StatusSelect
+                                                            appointment={a}
+                                                            onChange={(s) => changeStatusRemote(a.id, s)}
+                                                            disabled={false}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className={serviceAppointmentsStyles.detailsContainer}>
+                                                <div className={serviceAppointmentsStyles.detailItem}>
+                                                    <Phone className={serviceAppointmentsStyles.detailIcon} />
+                                                    <span className={serviceAppointmentsStyles.detailText}>
+                                                        {a.mobile}
+                                                    </span>
+                                                </div>
+
+                                                <div className={serviceAppointmentsStyles.detailItem}>
+                                                    <BadgeIndianRupee className={serviceAppointmentsStyles.detailIcon} />
+                                                    <span className={serviceAppointmentsStyles.feesText}>
+                                                        Fees: ₹{a.fees}
+                                                    </span>
+                                                </div>
+
+                                                <div className={serviceAppointmentsStyles.detailItem}>
+                                                    <Calendar className={serviceAppointmentsStyles.detailIcon} />
+                                                    <span className={serviceAppointmentsStyles.detailText}>
+                                                        Date: {formatDateNice(a.date)}
+                                                    </span>
+                                                </div>
+
+                                                <div className={serviceAppointmentsStyles.detailItem}>
+                                                    <Clock className={serviceAppointmentsStyles.detailIcon} />
+                                                    <span className={serviceAppointmentsStyles.detailText}>
+                                                        Time: {formatTimeDisplay(a)}
+                                                    </span>
+                                                </div>
+
+                                                <div className={serviceAppointmentsStyles.serviceText}>
+                                                    Service:{" "}
+                                                    <span className={serviceAppointmentsStyles.serviceName}>
+                                                        {a.serviceName}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className={serviceAppointmentsStyles.actionsContainer}>
+                                            <div className={serviceAppointmentsStyles.actionsInnerContainer}>
+                                                <div className="flex-1">
+                                                    <RescheduleButton
+                                                        appointment={a}
+                                                        onReschedule={(d, t) =>
+                                                            rescheduleRemote(a.id, d, t)
+                                                        }
+                                                        disabled={false}
+                                                    />
+                                                </div>
+
+                                                <div className="ml-3">
+                                                    <button
+                                                        onClick={() => cancelRemote(a.id)}
+                                                        disabled={isLocked}
+                                                        className={serviceAppointmentsStyles.cancelButton(isLocked)}
+                                                        title={
+                                                            isLocked ? "Cannot cancel" : "Cancel appointment"
+                                                        }
+                                                    >
+                                                        Cancel
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                            )
+                        })
+                    )}
+
+                </div>
+            )}
+
+            <Toast toasts={toasts} removeToast={removeToast} />
+            <div className={serviceAppointmentsStyles.legendContainer}>
+                <div className={serviceAppointmentsStyles.legendItem}>
+                    <div className={`${serviceAppointmentsStyles.legendDot} bg-amber-400`} />{" "}
+                    <span>
+                        Panding
+                    </span>
+                </div>
+
+
+                <div className={serviceAppointmentsStyles.legendItem}>
+                    <div className={`${serviceAppointmentsStyles.legendDot} bg-amerald-400`} />{" "}
+                    <span>
+                        Confirmed
+                    </span>
+                </div>
+
+
+                <div className={serviceAppointmentsStyles.legendItem}>
+                    <div className={`${serviceAppointmentsStyles.legendDot} bg-red-400`} />{" "}
+                    <span>
+                        Canceled
+                    </span>
+                </div>
+
+
+                <div className={serviceAppointmentsStyles.legendItem}>
+                    <div className={`${serviceAppointmentsStyles.legendDot} bg-sky-400`} />{" "}
+                    <span>
+                        Completed
+                    </span>
+                </div>
+
+
+                <div className={serviceAppointmentsStyles.legendItem}>
+                    <div className={`${serviceAppointmentsStyles.legendDot} bg-indigo-400`} />{" "}
+                    <span>
+                        Rescheduled
+                    </span>
+                </div>
+
+            </div>
+<style>{serviceAppointmentsStyles.animatedBorderStyle}</style>
 
         </div>
     )
