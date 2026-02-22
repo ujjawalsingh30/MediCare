@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { homeDoctorsStyles, iconSize } from '../assets/dummyStyles'
-import { Section } from 'lucide-react';
+import { homeDoctorsStyles, iconSize } from '../assets/dummyStyles';
+import { Link } from 'react-router-dom'
+import { ChevronRight, Medal, MousePointer, MousePointer2Off } from 'lucide-react';
+
 
 const HomeDoctors = ({ previewCount = 8 }) => {
     const API_BASE = 'http://localhost:4000';
@@ -75,7 +77,7 @@ const HomeDoctors = ({ previewCount = 8 }) => {
     const preview = doctors.slice(0, previewCount);
 
     return (
-        <Section className={homeDoctorsStyles.section}>
+        <section className={homeDoctorsStyles.section}>
             <div className={homeDoctorsStyles.container}>
                 <div className={homeDoctorsStyles.header}>
                     <h1 className={homeDoctorsStyles.title}>
@@ -143,13 +145,113 @@ const HomeDoctors = ({ previewCount = 8 }) => {
 
                 {loading ? (
                     <div className={homeDoctorsStyles.skeletonGrid}>
+                        {Array.from({ length: previewCount }).map((_, i) => (
+                            <div key={i} className={homeDoctorsStyles.skeletonCard}>
+                                <div className={homeDoctorsStyles.skeletonImage}></div>
+                                <div className={homeDoctorsStyles.skeletonText1}></div>
+                                <div className={homeDoctorsStyles.skeletonText2}></div>
+                                <div className='flex gap- mt-auto'>
+                                    <div className={homeDoctorsStyles.skeletonButton}></div>
 
+                                </div>
+
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className={homeDoctorsStyles.doctorsGrid}>
+                        {preview.map((doctor) => (
+                            <article key={doctor.id || doctor.name} className={homeDoctorsStyles.article}>
+                                {doctor.available ? (
+                                    <Link to={`/doctors/${doctor.id}`}
+                                        state={{
+                                            doctor: doctor.raw || doctor
+                                        }}>
+                                        <div className={homeDoctorsStyles.imageContainerAvailable}>
+
+                                            <img
+                                                src={doctor.image || "/placeholder-doctor.jpg"}
+                                                alt={doctor.name}
+                                                loading="lazy"
+                                                className={homeDoctorsStyles.image}
+                                                onError={(e) => {
+                                                    e.currentTarget.onerror = null;
+                                                    e.currentTarget.src = "/placeholder-doctor.jpg";
+                                                }}
+                                            />
+
+                                        </div>
+
+                                    </Link>
+                                ) : (
+                                    <div className={homeDoctorsStyles.imageContainerUnavailable}>
+                                        <img
+                                            src={doctor.image || "/placeholder-doctor.jpg"}
+                                            alt={doctor.name}
+                                            loading="lazy"
+                                            className={homeDoctorsStyles.image}
+                                            onError={(e) => {
+                                                e.currentTarget.onerror = null;
+                                                e.currentTarget.src = "/placeholder-doctor.jpg";
+                                            }}
+                                        />
+
+                                        <div className={homeDoctorsStyles.unavailableBadge}>
+                                            Not available
+                                        </div>
+
+                                    </div>
+                                )}
+
+                                {/* body */}
+                                <div className={homeDoctorsStyles.cardBody}>
+                                    <h3 className={homeDoctorsStyles.doctorName}
+                                        id={`doctor-${doctor.id}-name`}>
+                                        {doctor.name}
+                                    </h3>
+
+                                    <p className={homeDoctorsStyles.specialization}>
+                                        {doctor.specialization}
+                                    </p>
+
+                                    <div className={homeDoctorsStyles.experienceContainer}>
+                                        <div className={homeDoctorsStyles.experienceBadge}>
+                                            <Medal className={`${iconSize.small} h-4`} />
+                                            <span>{doctor.experience} Years Experience</span>
+                                        </div>
+                                    </div>
+
+                                    <div className={homeDoctorsStyles.buttonContainer}>
+                                        <div className='w-full'>
+                                            {doctor.available ? (
+                                                <Link to={`/doctors/${doctor.id}`} state={{
+                                                    doctor: doctor.raw || doctor
+                                                }} className={homeDoctorsStyles.buttonAvailable}>
+                                                    <ChevronRight className='w-5 h-5' />
+                                                    Book Now
+                                                </Link>
+                                            ) : (
+                                                <button disabled className={homeDoctorsStyles.buttonUnavailable}>
+                                                    <MousePointer2Off className='w-5 h-5' />
+                                                    Not Available
+                                                </button>
+                                            )}
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </article>
+                        ))}
                     </div>
                 )}
 
             </div>
 
-        </Section>
+            <style>{homeDoctorsStyles.customCSS}</style>
+        </section>
     )
 }
 
