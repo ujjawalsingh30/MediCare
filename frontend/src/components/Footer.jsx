@@ -130,18 +130,27 @@ const Footer = () => {
                         <h3 className={footerStyles.sectionTitle}>Quick Links</h3>
                         <ul className={footerStyles.linksList}>
                             {quickLinks.map((link, index) => (
-                                <li key={link.name} className={footerStyles.linkItem}
-                                    href={link.href} className={footerStyles.quickLink}
-                                    style={{
-                                        animationDelay: `${index * 60}ms`,
-                                    }}
-                                >
+                                // <li key={link.name} className={footerStyles.linkItem}
+                                //     href={link.href} className={footerStyles.quickLink}
+                                //     style={{
+                                //         animationDelay: `${index * 60}ms`,
+                                //     }}
+                                // >
 
-                                    <div className={footerStyles.quickLinkIconWrapper}>
-                                        <ArrowRight className={footerStyles.quickLinkIcon} />
-                                    </div>
-                                    <span>{link.name}</span>
-                                    <a />
+                                //     <div className={footerStyles.quickLinkIconWrapper}>
+                                //         <ArrowRight className={footerStyles.quickLinkIcon} />
+                                //     </div>
+                                //     <span>{link.name}</span>
+                                //     <a />
+                                // </li>
+                                <li key={link.name} className={footerStyles.linkItem}>
+                                    <a href={link.href} className={footerStyles.quickLink}
+                                        style={{ animationDelay: `${index * 60}ms` }}>
+                                        <div className={footerStyles.quickLinkIconWrapper}>
+                                            <ArrowRight className={footerStyles.quickLinkIcon} />
+                                        </div>
+                                        <span>{link.name}</span>
+                                    </a>
                                 </li>
                             ))}
                         </ul>
@@ -217,24 +226,24 @@ const Footer = () => {
                             </div>
                         </div>
                     </div>
+                </div>
+                <div className={footerStyles.bottomSection}>
+                    <div className={footerStyles.copyright}>
+                        <span>&copy;{currentYear} MediCare Healthcare.</span>
+                    </div>
+                    <div className={footerStyles.designerText}>
+                        <span>Designed by</span>
+                        <a href='https://ujjawalsinghdev.tech' target='_blank' className={footerStyles.designerLink}>
+                            Ujjawal singh
+                        </a>
 
-                    <div className={footerStyles.bottomSection}>
-                        <div className={footerStyles.copyright}>
-                            <span>&copy;{currentYear} MediCare Healthcare.</span>
-                        </div>
-                        <div className={footerStyles.designerText}>
-                            <span>Designed by</span>
-                            <a href='' target='_blank' className={footerStyles.designerLink}>
-                                Ujjawalsingh
-                            </a>
 
-                           
-
-                        </div>
 
                     </div>
 
                 </div>
+
+
             </div>
             <style>{footerStyles.animationStyles}</style>
         </footer>
