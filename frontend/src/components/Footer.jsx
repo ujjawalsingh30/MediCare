@@ -2,7 +2,7 @@
 import React from 'react'
 import { footerStyles } from '../assets/dummyStyles';
 import logo from '../assets/logo.png'
-import { Facebook, Twitter, Instagram, Linkedin, Youtube, Stethoscope, Activity, Phone, Mail, MapPin } from 'lucide-react'
+import { Facebook, Twitter, Instagram, Linkedin, Youtube, Stethoscope, Activity, Phone, Mail, MapPin, ArrowRight, Send } from 'lucide-react'
 
 const Footer = () => {
     const currentYear = new Date().getFullYear();
@@ -126,9 +126,117 @@ const Footer = () => {
                     </div>
 
                     {/* quick Links */}
+                    <div className={footerStyles.linksSection}>
+                        <h3 className={footerStyles.sectionTitle}>Quick Links</h3>
+                        <ul className={footerStyles.linksList}>
+                            {quickLinks.map((link, index) => (
+                                <li key={link.name} className={footerStyles.linkItem}
+                                    href={link.href} className={footerStyles.quickLink}
+                                    style={{
+                                        animationDelay: `${index * 60}ms`,
+                                    }}
+                                >
+
+                                    <div className={footerStyles.quickLinkIconWrapper}>
+                                        <ArrowRight className={footerStyles.quickLinkIcon} />
+                                    </div>
+                                    <span>{link.name}</span>
+                                    <a />
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    <div className={footerStyles.linksSection}>
+                        <h3 className={footerStyles.sectionTitle}>Our Services</h3>
+                        <ul className={footerStyles.linksList}>
+                            {services.map((service, index) => (
+                                <li key={service.name}>
+                                    <a href={service.href} className={footerStyles.serviceLink}>
+                                        <div className={footerStyles.serviceIcon}></div>
+                                        <span>{service.name}</span>
+
+
+                                    </a>
+                                </li>
+                            ))}
+
+                        </ul>
+                    </div>
+
+                    {/* Newsletter & Social */}
+                    <div className={footerStyles.newsletterSection}>
+                        <h3 className={footerStyles.newsletterTitle}>Stay Connected</h3>
+                        <p className={footerStyles.newsletterDescription}>
+                            Subscribe for health tips, medical updates, and wellness insights delivered
+                            to your inbox.
+                        </p>
+
+                        {/* Newsletter form */}
+                        <div className={footerStyles.newsletterForm}>
+                            <div className={footerStyles.mobileNewsletterContainer}>
+                                <input
+                                    type="email"
+                                    placeholder="Enter your email"
+                                    className={footerStyles.emailInput}
+                                />
+                                <button className={footerStyles.mobileSubscribeButton}>
+                                    <Send className={footerStyles.mobileButtonIcon} />
+                                    Subscribe
+                                </button>
+                            </div>
+
+                            {/* Desktop newsletter */}
+                            <div className={footerStyles.desktopNewsletterContainer}>
+                                <input
+                                    type="email"
+                                    placeholder="Enter your email"
+                                    className={footerStyles.desktopEmailInput}
+                                />
+                                <button className={footerStyles.desktopSubscribeButton}>
+                                    <Send className={footerStyles.desktopButtonIcon} />
+                                    <span className={footerStyles.desktopButtonText}>Subscribe</span>
+                                </button>
+                            </div>
+
+                            {/* Social icons */}
+                            <div className={footerStyles.socialContainer}>
+                                {socialLinks.map(({ Icon, color, name, href }, index) => (
+                                    <a
+                                        key={name}
+                                        href={href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className={footerStyles.socialLink}
+                                        style={{ animationDelay: `${index * 120}ms` }}
+                                    >
+                                        <div className={footerStyles.socialIconBackground} />
+                                        <Icon className={`${footerStyles.socialIcon} ${color}`} />
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className={footerStyles.bottomSection}>
+                        <div className={footerStyles.copyright}>
+                            <span>&copy;{currentYear} MediCare Healthcare.</span>
+                        </div>
+                        <div className={footerStyles.designerText}>
+                            <span>Designed by</span>
+                            <a href='' target='_blank' className={footerStyles.designerLink}>
+                                Ujjawalsingh
+                            </a>
+
+                           
+
+                        </div>
+
+                    </div>
 
                 </div>
             </div>
+            <style>{footerStyles.animationStyles}</style>
         </footer>
     )
 }
