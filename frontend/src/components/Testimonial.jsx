@@ -170,7 +170,8 @@ const Testimonial = () => {
             </div>
 
             <div className={testimonialStyles.grid}
-                onMouseEnter={() => setIsPaused(ture)}
+                // onMouseEnter={() => setIsPaused(ture)}
+                onMouseEnter={() => setIsPaused(true)}
                 onMouseLeave={() => setIsPaused(false)}>
                 <div className={`${testimonialStyles.columnContainer} ${testimonialStyles.leftCardBorder
                     }`}>
@@ -180,11 +181,16 @@ const Testimonial = () => {
                     </div>
                     <div onTouchStart={() => setIsPaused(true)}
                         onTouchEnd={() => setIsPaused(false)} ref={scrollRefLeft} className={testimonialStyles.scrollContainer}>
-                        {[...leftTestimonials, ...leftTestimonials.map((t, i) => (
+                        {/* {[...leftTestimonials, ...leftTestimonials.map((t, i) => (
                             <TestimonialCard key={`L-${i}`}
                                 testimonial={t}
                                 direction="left" />
-                        ))]}
+                        ))]} */}
+                        {[...leftTestimonials, ...leftTestimonials].map((t, i) => (
+                            <TestimonialCard key={`L-${i}`}
+                                testimonial={t}
+                                direction="left" />
+                        ))}
                     </div>
                 </div>
 
