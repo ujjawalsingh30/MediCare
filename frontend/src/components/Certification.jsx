@@ -28,7 +28,8 @@ const Certification = () => {
                 <div className={certificationStyles.gridContainer}>
                     <div className={certificationStyles.grid}>
                         {Array.from({ length: 144 }).map((_, i) => (
-                            <div className={certificationStyles.gridCell}></div>
+                            // <div className={certificationStyles.gridCell}></div>
+                            <div key={i} className={certificationStyles.gridCell}></div>
                         ))}
                     </div>
                 </div>
