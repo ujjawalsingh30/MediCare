@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { servicePageStyles, serviceCardStyles } from '../assets/dummyStyles'
 import { Link, MousePointer2Off } from 'lucide-react';
 
@@ -104,13 +104,14 @@ const ServiceCard = ({ service }) => {
     );
 };
 
-const ServicePage = () => {
+const ServicePage = ({ previewCount = 9999 }) => {
 
     const API_BASE = "http://localhost:4000";
     const [services, setServices] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
+    // to load services coming from the server
     async function loadServices() {
         setLoading(true);
         setError("");
@@ -171,7 +172,29 @@ const ServicePage = () => {
     const shown = services.slice(0, previewCount);
 
     return (
-        <div>
+        <div className={servicePageStyles.pageContainer}>
+            <div className={servicePageStyles.maxWidthContainer}>
+                <header className={servicePageStyles.header}>
+                    <h1 className={servicePageStyles.title}>Our Diagnostic Services</h1>
+                    <p className={servicePageStyles.subtitle}>
+                        Safe, accurate & reliable testing.
+                    </p>
+                </header>
+
+                {error && (
+                    <div className={servicePageStyles.errorContainer}>
+                        <div className={servicePageStyles.errorText}>{error}</div>
+                        <button onClick={loadServices} className={servicePageStyles.retryButton}>
+                            retry
+
+                        </button>
+
+
+
+                    </div>
+                )}
+
+            </div>
 
         </div>
     )
