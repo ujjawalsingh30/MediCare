@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { contactPageStyles } from '../assets/dummyStyles';
 // import { Mail } from 'lucide-react';
-import { Mail, User, Phone, MapPin, Stethoscope, MenuSquare } from 'lucide-react';
+import { Mail, User, Phone, MapPin, Stethoscope, MenuSquare, SendHorizonal } from 'lucide-react';
 
 
 
@@ -164,11 +164,20 @@ const ContactPage = () => {
                 <label className={contactPageStyles.label}>
                   <Mail size={16} /> Email
                 </label>
-                <input type="email"
+                {/* <input type="email"
                   value={form.email}
                   onChange={handleChange}
                   placeholder='example@gmail.com'
-                  className={contactPageStyles.input} />
+                  className={contactPageStyles.input} /> */}
+
+                <input
+                  name="email"
+                  type="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  placeholder="example@gmail.com"
+                  className={contactPageStyles.input}
+                />
                 {errors.email && (
                   <p className={contactPageStyles.error}>{errors.email}</p>
                 )}
@@ -246,19 +255,73 @@ const ContactPage = () => {
                 <MenuSquare size={16} /> Message
               </label>
 
-              <textarea name='messsage' value={form.message}
+              {/* <textarea name='messsage' value={form.message}
                 onChange={handleChange} placeholder='Describe your concern briefly...'
-                rows={4} className={contactPageStyles.textarea} />
-              {errors.mesage && (
+                rows={4} className={contactPageStyles.textarea} /> */}
+              <textarea
+                name="message"
+                value={form.message}
+                onChange={handleChange}
+                placeholder="Describe your concern briefly..."
+                rows={4}
+                className={contactPageStyles.textarea}
+              />
+              {/* {errors.mesage && (
+                <p className={contactPageStyles.error}>{errors.message}</p>
+              )} */}
+              {errors.message && (
                 <p className={contactPageStyles.error}>{errors.message}</p>
               )}
+            </div>
 
+            <div className={contactPageStyles.buttonContainer}>
+              <button type='submit' className={contactPageStyles.button}>
+                <SendHorizonal size={18} /> <span>Send via WhatsApp</span>
+              </button>
+
+              {sent && (
+                <p className={contactPageStyles.successMessage}>
+                  Opening WhatsApp and clearing form...
+                </p>
+              )}
 
             </div>
           </form>
+        </div>
+
+        {/* right side */}
+        <div className={contactPageStyles.infoContainer}>
+          <div className={contactPageStyles.infoCard}>
+            <h3 className={contactPageStyles.infoTitle}>Visit Our Clinic</h3>
+            <p className={contactPageStyles.infoText}>Amritsar, Punjab</p>
+            <p className={contactPageStyles.infoItem}>
+              <Phone size={16} />+9108596223
+            </p>
+
+            <p className={contactPageStyles.infoItem}>
+              <Mail size={16} /> info@clinic.com
+            </p>
+          </div>
+
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3559.460792853461!2d80.98709187529213!3d26.870382662861033!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399be2ae3cea2421%3A0x6c0de12e8a77818f!2sGomti%20Nagar%2C%20Lucknow%2C%20Uttar%20Pradesh!5e0!3m2!1sen!2sin!4v1731769000000!5m2!1sen!2sin"
+            className={contactPageStyles.map}
+            title="Gomti Nagar Map"
+            loading="lazy"
+            allowFullScreen
+          ></iframe>
+
+          <div className={contactPageStyles.hoursContainer}>
+            <h4 className={contactPageStyles.hoursTitle}>Clinic Hours</h4>
+            <p className={contactPageStyles.hoursText}>
+              Mon - Sat: 9:00 AM - 6:00 PM
+            </p>
+
+          </div>
 
         </div>
       </div>
+      <style>{contactPageStyles.animationKeyframes}</style>
     </div>
   )
 }
