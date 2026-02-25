@@ -126,7 +126,7 @@ const Navbar = () => {
                         {/* right side  */}
                         <div className={navbarStyles.rightContainer}>
                             <SignedOut>
-                                <Link to='/doctor-admin/logo' className={navbarStyles.doctorAdminButton}>
+                                <Link to='/doctor-admin/login' className={navbarStyles.doctorAdminButton}>
                                     <User className={navbarStyles.doctorAdminIcon} />
                                     <span className={navbarStyles.doctorAdminText}>
                                         Doctor Admin
@@ -143,16 +143,6 @@ const Navbar = () => {
                             <SignedIn>
                                 <UserButton afterSignOutUrl='/' />
                             </SignedIn>
-
-                            {/* to toggle  */}
-
-                            {/* <button onClick={()=> setIsOpen(!isOpen)} className={navbarStyles.mobileToggle}>
-                                {isOpen ? (
-                                    <X className={navbarStyles.toggleIcon} />
-                                ) : (
-                                    <Menu className={navbarStyles.toggleIcon}/>
-                                )
-                                )} */}
 
                             <button onClick={() => setIsOpen(!isOpen)} className={navbarStyles.mobileToggle}>
                                 {isOpen ? (
