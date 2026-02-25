@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { servicePageStyles, serviceCardStyles } from '../assets/dummyStyles'
-import { Link, MousePointer2Off } from 'lucide-react';
+import { ChevronRight, MousePointer2Off } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 
 const PlaceholderImg = "/placeholder-service.jpg";
@@ -85,7 +86,8 @@ const ServiceCard = ({ service }) => {
                             className={serviceCardStyles.buttonAvailable}
                             aria-label={`Book ${name}`}
                         >
-                            <ChevronsRight className="w-5 h-5" aria-hidden="true" />
+                           <ChevronRight className="w-5 h-5" aria-hidden="true" />
+
                             Book Now
                         </Link>
                     ) : (
@@ -186,12 +188,39 @@ const ServicePage = ({ previewCount = 9999 }) => {
                         <div className={servicePageStyles.errorText}>{error}</div>
                         <button onClick={loadServices} className={servicePageStyles.retryButton}>
                             retry
-
                         </button>
-
-
-
                     </div>
+                )}
+
+                {loading ? (
+                    <section className={servicePageStyles.skeletonGrid}>
+
+                        {Array.from({ length: 8 }).map((_, i) => (
+                            <div key={i} className={servicePageStyles.skeletonCard}>
+                                <div className={servicePageStyles.skeletonImage}></div>
+                                <div className={servicePageStyles.skeletonText1}></div>
+                                <div className={servicePageStyles.skeletonText2}></div>
+                                <div className={servicePageStyles.skeletonButton}></div>
+
+
+
+                            </div>
+                        ))}
+
+                    </section>
+                ) : (
+                    <section className={servicePageStyles.servicesGrid}>
+                        {shown.length > 0 ? (
+                            shown.map((s) => <ServiceCard key={s.id || s.name} service={s} />)
+                        ) : (
+
+                            <div className={servicePageStyles.emptyState}>
+                                No services available.
+                            </div>
+                        )}
+
+                    </section>
+
                 )}
 
             </div>
