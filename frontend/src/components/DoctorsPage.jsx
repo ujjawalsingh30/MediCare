@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { doctorsPageStyles } from '../assets/dummyStyles';
-import { ChevronRight, Medal, MousePointer2Off, Search, X } from "lucide-react";
+import { ChevronRight, CircleChevronDown, CircleChevronUp, Medal, MousePointer2Off, Search, X } from "lucide-react";
 import { Link } from "react-router-dom";
 
 
@@ -202,7 +202,7 @@ const DoctorsPage = () => {
                     // <div className={`${doctorsPageStyles.doctorsGrid} ${filteredDoctors.length === 0 > "opecity-70" : "opecity-100"
                     /* }`}> */
                     <div className={`${doctorsPageStyles.doctorsGrid} ${filteredDoctors.length === 0 ? "opacity-70" : "opacity-100"}`}>
-                        
+
                         {displayedDoctors.length > 0 ? (
                             displayedDoctors.map((doctor, index) => (
                                 <div key={doctor.id || `${doctor.name}-${index}`}
@@ -288,7 +288,54 @@ const DoctorsPage = () => {
                     </div>
                 )}
 
+                {filteredDoctors.length > 8 && (
+                    <div className={doctorsPageStyles.showMoreContainer}>
+                        <button onClick={() => setShowAll(!showAll)} className={doctorsPageStyles.showMoreButton}>
+                            {showAll ? (
+                                <>
+                                    <CircleChevronUp className={doctorsPageStyles.showMoreIcon} />
+                                    Hide
+                                </>
+                            ) : (
+                                <>
+                                    <CircleChevronDown className={doctorsPageStyles.showMoreIcon} />
+                                    Show More
+                                </>
+                            )}
+                        </button>
+
+                    </div>
+                )}
+
             </div>
+
+            {/* Animations */}
+            <style>{`
+        @keyframes fade-in {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fade-in-up {
+          from { opacity: 0; transform: translateY(40px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slide-up {
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fade-in 0.9s ease-out; }
+        .animate-fade-in-up { animation: fade-in-up 0.9s ease-out both; }
+        .animate-slide-up { animation: slide-up 0.8s ease-out; }
+
+        @media (max-width: 420px) {
+          .max-w-7xl { padding-left: 10px; padding-right: 10px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          * { animation: none !important; transition: none !important; }
+        }
+      `}</style>
+
         </div >
     );
 };
