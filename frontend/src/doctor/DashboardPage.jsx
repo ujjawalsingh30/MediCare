@@ -12,6 +12,7 @@ import { dashboardStyles } from "../assets/dummyStyles";
 
 const API_BASE = "http://localhost:4000";
 
+// date with time
 function parseDateTime(date, time) {
   return new Date(`${date}T${time}:00`);
 }
@@ -572,8 +573,8 @@ function StatusSelect({ appointment, onChange }) {
         value={appointment.status}
         onChange={(e) => onChange(e.target.value)}
         className={`${dashboardStyles.statusSelect} ${terminal
-            ? dashboardStyles.statusSelectDisabled
-            : dashboardStyles.statusSelectEnabled
+          ? dashboardStyles.statusSelectDisabled
+          : dashboardStyles.statusSelectEnabled
           }`}
         title="Change status (only Completed or Cancelled allowed after reschedule)"
       >
@@ -599,8 +600,8 @@ function StatusSelect({ appointment, onChange }) {
       onChange={(e) => onChange(e.target.value)}
       disabled={terminal}
       className={`${dashboardStyles.statusSelect} ${terminal
-          ? dashboardStyles.statusSelectDisabled
-          : dashboardStyles.statusSelectEnabled
+        ? dashboardStyles.statusSelectDisabled
+        : dashboardStyles.statusSelectEnabled
         }`}
       title={terminal ? "Status cannot be changed" : "Change status"}
     >
@@ -664,8 +665,8 @@ function RescheduleButton({ appointment, onReschedule }) {
               terminal ? "Cannot reschedule completed/cancelled" : "Reschedule"
             }
             className={`${dashboardStyles.rescheduleButton} ${terminal
-                ? dashboardStyles.rescheduleButtonDisabled
-                : dashboardStyles.rescheduleButtonEnabled
+              ? dashboardStyles.rescheduleButtonDisabled
+              : dashboardStyles.rescheduleButtonEnabled
               }`}
           >
             Reschedule
