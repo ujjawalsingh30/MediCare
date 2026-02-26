@@ -578,7 +578,7 @@ const ListPage = () => {
                                 </div>
 
                                 <div className={listPageStyles.rescheduleContainer}>
-                                    <RescheduleButton appointment={a} onReschedule={(d,t) => updateDateTime(a.id, d,t)}/>
+                                    <RescheduleButton appointment={a} onReschedule={(d, t) => updateDateTime(a.id, d, t)} />
 
                                 </div>
 
