@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { appointmentPageStyles, cardStyles, badgeStyles, iconSize } from '../assets/dummyStyles';
-import axios from axios;
+import axios from 'axios';
 import { Bell, CalendarDays, CheckCircle, Clock, CreditCard, Wallet, XCircle } from 'lucide-react';
 import { useAuth, useUser } from '@clerk/clerk-react';
+import { Toaster } from 'react-hot-toast';
 
 const API_BASE = "http://localhost:4000";
 const API = axios.create({ baseUrl: API_BASE });
@@ -154,6 +155,7 @@ const AppointmentPage = () => {
     });
     const [error, setError] = useState(null);
 
+    // to fetch doxtor Appointments
     const loadDoctorAppointments = useCallback(async () => {
         if (!isLoaded) return;
         setLoadingDoctors(true);
@@ -245,6 +247,7 @@ const AppointmentPage = () => {
         }
     }, [isLoaded, getToken, user]);
 
+    // to load service appointment from the server side
     const loadServiceAppointments = useCallback(async () => {
         if (!isLoaded) return;
         setLoadingServices(true);
@@ -329,6 +332,7 @@ const AppointmentPage = () => {
         loadServiceAppointments,
     ]);
 
+    // to reschedule we have to normalize the field with UI
     function normalizeRescheduled(rt) {
         if (!rt) return null;
         if (rt.date && rt.time) return { date: rt.date, time: rt.time };
@@ -351,6 +355,7 @@ const AppointmentPage = () => {
         };
     }
 
+    // to get the appointment deatils
     const appointmentData = useMemo(() => {
         return doctorAppts
             .map((a) => {
@@ -466,7 +471,130 @@ const AppointmentPage = () => {
 
 
     return (
-        <div>
+        <div className={appointmentPageStyles.pageContainer}>
+            <Toaster position='top-right' />
+            <div className={appointmentPageStyles.maxWidthContainer}>
+                <h1 className={appointmentPageStyles.doctorTitle}>
+                    Your Doctor Appointments
+                </h1>
+                {loadingDoctors && (
+                    <div className={appointmentPageStyles.loadingText}>
+                        Loading Doctors...
+
+                    </div>
+                )}
+                {!loadingDoctors && appointmentData.length === 0 && (
+                    <div className={appointmentPageStyles.emptyStateText}>
+                        No doctor appointmets found.
+                    </div>
+                )}
+
+                <div className={appointmentPageStyles.doctorGrid}>
+                    {appointmentData.map((item) => (
+                        <div key={item.id} className={cardStyles.doctorCard}>
+                            <div className={cardStyles.doctorImageContainer}>
+                                <img src={item.image || "placeholder-doctor.png"} alt={item.doctor} className={cardStyles.image}
+                                    loading='lazy' />
+                            </div>
+
+                            <h2 className={cardStyles.doctorName}>
+                                {item.doctor}
+                            </h2>
+                            <div className={cardStyles.specialization}>
+                                {item.specialization}{" "}
+                                {item.experience ? `${item.experience}` : ""}
+                            </div>
+
+                            <p className={cardStyles.dateContainer}>
+                                <CalendarDays className={iconSize.medium} /> {item.date}
+                            </p>
+                            <p className={cardStyles.timeContainer}>
+                                <Clock className={iconSize.medium} /> {item.time}
+                            </p>
+
+                            <div className={cardStyles.badgesContainer}>
+                                <PaymentBadge payment={item.payment} />
+                                <StatusBadge className={item.status} />
+                            </div>
+
+                            {item.status === "Rescheduled" && item.rescheduledTo ? (
+                                <div className={cardStyles.rescheduledText}>
+                                    Reschesule to{" "}
+                                    <span className={cardStyles.rescheduledSpan}>
+                                        {item.rescheduledTo.date} : {item.rescheduledTo.time}
+                                    </span>
+                                </div>
+                            ) : null}
+
+                        </div>
+                    ))}
+                </div>
+
+                <h2 className={appointmentPageStyles.serviceTitle}>
+                    Your Booked Services
+                </h2>
+                {loadingServices && (
+                    <div className={appointmentPageStyles.serviceLoadingText}>
+                        Loading Service Bookings...
+
+                    </div>
+                )}
+                {!loadingServices && serviceData.length === 0 && (
+                    <div className={appointmentPageStyles.serviceEmptyStateText}>
+                        No service bookings found.
+                    </div>
+                )}
+
+
+
+
+
+                <div className={appointmentPageStyles.serviceGrid}>
+                    {serviceData.map((srv) => (
+                        <div key={srv.id} className={cardStyles.serviceCard}>
+                            <div className={cardStyles.serviceImageContainer}>
+                                <img
+                                    src={srv.image || "/placeholder-service.png"}
+                                    alt={srv.name}
+                                    className={cardStyles.image}
+                                    loading="lazy"
+                                />
+                            </div>
+
+                            <h3 className={cardStyles.serviceName}>{srv.name}</h3>
+
+                            <p className={cardStyles.price}>₹{srv.price}</p>
+
+                            <p className={cardStyles.serviceDateContainer}>
+                                <CalendarDays className={iconSize.medium} /> {srv.date}
+                            </p>
+
+                            <p className={cardStyles.serviceTimeContainer}>
+                                <Clock className={iconSize.medium} /> {srv.time}
+                            </p>
+
+                            <div className={cardStyles.badgesContainer}>
+                                <PaymentBadge payment={srv.payment} />
+                                <StatusBadge itemStatus={srv.status} />
+                            </div>
+
+                            {srv.status === "Rescheduled" && srv.rescheduledTo ? (
+                                <div className={cardStyles.serviceRescheduledText}>
+                                    Rescheduled to{" "}
+                                    <span className={cardStyles.rescheduledSpan}>
+                                        {srv.rescheduledTo.date} : {srv.rescheduledTo.time}
+                                    </span>
+                                </div>
+                            ) : null}
+                        </div>
+                    ))}
+                </div>
+
+
+
+
+
+            </div>
 
         </div>
     )
