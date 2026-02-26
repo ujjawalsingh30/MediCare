@@ -10,6 +10,7 @@ import Login from './pages/Login'
 import DHome from './pages/DHome'
 import List from './doctor/List'
 import EditProfile from './doctor/EditProfile'
+import Appointments from './pages/Appointments'
 
 const App = () => {
   return (
@@ -19,14 +20,13 @@ const App = () => {
         <Route path='/doctors' element={<Doctors />} />
         <Route path='/doctors/:id' element={<DoctorDetail />} />
         <Route path='/services' element={<Service />} />
+        <Route path='appointments' element={<Appointments/>} />
         <Route path='/contact' element={<Contact />} />
-
+        {/* Doctor */}
         <Route path='/doctor-admin/login' element={<Login />} />
-
         <Route path='/doctor-admin/:id' element={<DHome />} />
-
         <Route path='/doctor-admin/:id/appointments' element={<List />} />
-        <Route path='/doctor-admin/:id/profile/edit'element={<EditProfile/>}/>
+        <Route path='/doctor-admin/:id/profile/edit' element={<EditProfile />} />
 
       </Routes>
 

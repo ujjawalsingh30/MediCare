@@ -359,10 +359,10 @@ export default function EditProfilePage({ apiBase }) {
                         <div
                             key={t.id}
                             className={`${styles.toastBase} ${t.type === "error"
-                                    ? styles.toastError
-                                    : t.type === "info"
-                                        ? styles.toastInfo
-                                        : styles.toastSuccess
+                                ? styles.toastError
+                                : t.type === "info"
+                                    ? styles.toastInfo
+                                    : styles.toastSuccess
                                 }`}
                         >
                             {t.type === "error" ? (
