@@ -76,7 +76,7 @@ export const getAppointments = async (req, res) => {
 
 
 
-            
+
 
         const total = await Appointment.countDocuments(filter);
         return res.json({
@@ -164,11 +164,20 @@ export const createAppointement = async (req, res) => {
             });
         }
 
-        const numericFree = safeNumber(fee ?? fees ?? 0);
-        return res.status(400).json({
-            success: false,
-            message: "Fee must be a valid number"
-        });
+        // const numericFree = safeNumber(fee ?? fees ?? 0);
+        // return res.status(400).json({
+        //     success: false,
+        //     message: "Fee must be a valid number"
+        // });
+
+        const numericFee = safeNumber(fee ?? fees ?? 0);   // fix typo: numericFree → numericFee
+
+        if (isNaN(numericFee)) {                            // only return error IF fee is invalid
+            return res.status(400).json({
+                success: false,
+                message: "Fee must be a valid number"
+            });
+        }
 
         // Duplicate booking prevention
         const existingBooking = await Appointment.findOne({

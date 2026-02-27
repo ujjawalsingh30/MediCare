@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 
 import { serviceAppointmentsStyles } from '../assets/dummyStyles'
-import { Loader2, Search, SearchIcon, XIcon } from 'lucide-react';
+import { Loader2, Search, SearchIcon, XIcon, User, Phone, BadgeIndianRupee, Calendar, Clock, CheckCircle } from 'lucide-react';
 
 
 const API_BASE = "http://localhost:4000";

@@ -86,7 +86,7 @@ const ServiceCard = ({ service }) => {
                             className={serviceCardStyles.buttonAvailable}
                             aria-label={`Book ${name}`}
                         >
-                           <ChevronRight className="w-5 h-5" aria-hidden="true" />
+                            <ChevronRight className="w-5 h-5" aria-hidden="true" />
 
                             Book Now
                         </Link>
@@ -167,9 +167,12 @@ const ServicePage = ({ previewCount = 9999 }) => {
         }
     }
 
+    // useEffect(() => {
+    //     loadServices();
+    // }, [API_BASE]);
     useEffect(() => {
         loadServices();
-    }, [API_BASE]);
+    }, []);
 
     const shown = services.slice(0, previewCount);
 
@@ -211,7 +214,8 @@ const ServicePage = ({ previewCount = 9999 }) => {
                 ) : (
                     <section className={servicePageStyles.servicesGrid}>
                         {shown.length > 0 ? (
-                            shown.map((s) => <ServiceCard key={s.id || s.name} service={s} />)
+                            // shown.map((s) => <ServiceCard key={s.id || s.name} service={s} />)
+                            shown.map((s) => <ServiceCard key={s.id} service={s} />)
                         ) : (
 
                             <div className={servicePageStyles.emptyState}>

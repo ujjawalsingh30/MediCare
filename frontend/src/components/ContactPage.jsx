@@ -150,10 +150,20 @@ const ContactPage = () => {
                 <label className={contactPageStyles.label}>
                   <User size={16} /> Full Name
                 </label>
-                <input type="name" value={form.name}
+                {/* <input type="name" value={form.name}
                   onChange={handleChange}
                   placeholder='Full Name'
-                  className={contactPageStyles.input} />
+                  className={contactPageStyles.input} /> */}
+
+                <input
+                  name="name"
+                  type="text"
+                  value={form.name}
+                  onChange={handleChange}
+                  placeholder="Full Name"
+                  className={contactPageStyles.input}
+                />
+
                 {errors.name && (
                   <p className={contactPageStyles.error}>{errors.name}</p>
                 )}
@@ -303,13 +313,37 @@ const ContactPage = () => {
             </p>
           </div>
 
-          <iframe
+          {/* <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3559.460792853461!2d80.98709187529213!3d26.870382662861033!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399be2ae3cea2421%3A0x6c0de12e8a77818f!2sGomti%20Nagar%2C%20Lucknow%2C%20Uttar%20Pradesh!5e0!3m2!1sen!2sin!4v1731769000000!5m2!1sen!2sin"
             className={contactPageStyles.map}
             title="Gomti Nagar Map"
             loading="lazy"
             allowFullScreen
-          ></iframe>
+          ></iframe> */}
+
+
+
+
+
+
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d434548.47406693763!2d74.36210218906253!3d31.6910295!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391964e2de81841d%3A0x180baa8553daf078!2sGlobal%20Group%20of%20Institutes!5e0!3m2!1sen!2sin!4v1772177721393!5m2!1sen!2sin"
+            width="600"
+            height="450"
+            style={{ border: 0 }}          // ✅ object not string
+            allowFullScreen               // ✅ camelCase
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"   // ✅ camelCase
+            title="Clinic Location Map"   // ✅ always add title for accessibility
+          />
+
+
+
+
+
+
+
+
 
           <div className={contactPageStyles.hoursContainer}>
             <h4 className={contactPageStyles.hoursTitle}>Clinic Hours</h4>
