@@ -55,7 +55,7 @@ const Navbar = () => {
     }, []);
 
 
-// Close the toggle menu for mobile when click outside 
+    // Close the toggle menu for mobile when click outside 
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (isOpen && navRef.current && !navRef.current.contains(event.target)) {
@@ -136,6 +136,7 @@ const Navbar = () => {
                                 {/* patient login */}
                                 <button onClick={() => clerk.openSignIn()} className={navbarStyles.loginButton}>
                                     <key className={navbarStyles.loginIcon} />
+                                    {/* <LogIn className={navbarStyles.loginIcon} /> */}
                                     Login
                                 </button>
                             </SignedOut>
@@ -172,10 +173,17 @@ const Navbar = () => {
                             })}
 
                             <SignedOut>
-                                <Link to='/doctor-admin/login' className={navbarStyles.mobileDoctorAdminButton}
+                                {/* <Link to='/doctor-admin/login' className={navbarStyles.mobileDoctorAdminButton}
                                     onClick={() => setIsOpen}
                                     Doctor Admin
                                 >
+                                </Link> */}
+                                <Link
+                                    to='/doctor-admin/login'
+                                    className={navbarStyles.mobileDoctorAdminButton}
+                                    onClick={() => setIsOpen(false)}  
+                                >
+                                    Doctor Admin                       
                                 </Link>
 
                                 <div className={navbarStyles.mobileLoginContainer}>
