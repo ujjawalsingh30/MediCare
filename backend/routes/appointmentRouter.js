@@ -10,7 +10,7 @@ appointementRouter.get("/stats/summary", getStats);
 
 // authentic router
 appointementRouter.post('/', clerkMiddleware(), requireAuth(), createAppointement);
-appointementRouter.post('/', clerkMiddleware(), requireAuth(), getAppointmentsByPatient);
+appointementRouter.get('/me', clerkMiddleware(), requireAuth(), getAppointmentsByPatient);
 
 appointementRouter.get("/doctor/:doctorId", getAppointmentsByDoctor);
 

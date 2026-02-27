@@ -493,10 +493,12 @@ export const getServiceAppointmentByPatient = async (req, res) => {
         });
 
         const filter = {};
-        if (resolvedCreateBy) filter.createBy = resolvedCreateBy;
+        // if (resolvedCreateBy) filter.createBy = resolvedCreateBy;
+        if (resolvedCreateBy) filter.createdBy = resolvedCreateBy;
         if (mobile) filter.mobile = mobile;
 
-        const list = (await ServiceAppointment.find(filter)).toSorted({ createdAt: -1 }).lean();
+        // const list = (await ServiceAppointment.find(filter)).toSorted({ createdAt: -1 }).lean();
+        const list = await ServiceAppointment.find(filter).sort({ createdAt: -1 }).lean();
         return res.json({
             success: true,
             data: list

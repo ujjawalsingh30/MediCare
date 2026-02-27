@@ -15,12 +15,19 @@ const Footer = () => {
         { name: "Appointments", href: "/appointments" },
     ];
 
+    // const services = [
+    //     { name: "Blood Pressure Check", href: "/services" },
+    //     { name: "Blood Sugar Test", href: "/services" },
+    //     { name: "Full Blood Count", href: "/services" },
+    //     { name: "X-Ray Scan", href: "/services" },
+    //     { name: "Blood Sugar Test", href: "/services" },
+    // ];
     const services = [
         { name: "Blood Pressure Check", href: "/services" },
         { name: "Blood Sugar Test", href: "/services" },
         { name: "Full Blood Count", href: "/services" },
         { name: "X-Ray Scan", href: "/services" },
-        { name: "Blood Sugar Test", href: "/services" },
+        { name: "Ultrasound Scan", href: "/services" },   
     ];
 
     const socialLinks = [

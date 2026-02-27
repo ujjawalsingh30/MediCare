@@ -269,7 +269,8 @@ const AppointmentsPage = () => {
                                     value={filterSpeciality} onChange={(e) => setFilterSpeciality(e.target.value)}>
                                     {specialities.map((s) => (
                                         <option value={s} key={s}>
-                                            {s === "All" ? "All Specialties" : s}
+                                            {/* {s === "All" ? "All Specialties" : s} */}
+                                            {s === "all" ? "All Specialties" : s}
                                         </option>
                                     ))}
 
@@ -300,14 +301,17 @@ const AppointmentsPage = () => {
                 ) : (
 
                     <main className={pageStyles.gridContainer}>
-                        {displayed.amp((a, idx) => {
-                            const statusLower = (e.status || "").toLowerCase();
+                        {/* {displayed.amp((a, idx) => { */}
+                        {displayed.map((a, idx) => {
+                            // const statusLower = (e.status || "").toLowerCase();
+                            const statusLower = (a.status || "").toLowerCase();
                             const isCancelled =
                                 statusLower === "canceled" || statusLower === "cancelled";
                             const isCompleted = statusLower === "completed";
                             const isDisabled = isCancelled || isCompleted;
 
                             return (
+
                                 <div
                                     key={a.id}
                                     style={{
@@ -398,12 +402,12 @@ const AppointmentsPage = () => {
 
                 {sortedFiltered.length > 8 && (
                     <div className='flex justify-center mt-4'>
-                        <button onClick={() => setShowAll((s) => !s )}
+                        <button onClick={() => setShowAll((s) => !s)}
                             className={pageStyles.showMoreButton}>
-                                {showAll ? "Show Less" : `Show more (${sortedFiltered.length -8})`}
+                            {showAll ? "Show Less" : `Show more (${sortedFiltered.length - 8})`}
 
                         </button>
-                        
+
                     </div>
                 )}
 

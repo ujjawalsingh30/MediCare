@@ -6,7 +6,8 @@ import { useAuth, useUser } from '@clerk/clerk-react';
 import { Toaster } from 'react-hot-toast';
 
 const API_BASE = "http://localhost:4000";
-const API = axios.create({ baseUrl: API_BASE });
+// const API = axios.create({ baseUrl: API_BASE });
+const API = axios.create({ baseURL: API_BASE });
 
 // Helper function
 
@@ -514,7 +515,9 @@ const AppointmentPage = () => {
 
                             <div className={cardStyles.badgesContainer}>
                                 <PaymentBadge payment={item.payment} />
-                                <StatusBadge className={item.status} />
+                                {/* <StatusBadge className={item.status} /> */}
+                                <StatusBadge itemStatus={item.status} />
+
                             </div>
 
                             {item.status === "Rescheduled" && item.rescheduledTo ? (
