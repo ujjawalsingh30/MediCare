@@ -3,7 +3,7 @@
 # 🏥 Medicare - Doctor Appointment Booking System
 
 <p align="center">
-  <img src="./client/public/home.png" alt="Car Rental Homepage Screenshot" width="800"/>
+  <img src="./frontend/public/Home.png" alt="Medicare Homepage Screenshot" width="900"/>
 </p>
 Medicare is a full-stack healthcare web application that allows patients to search doctors, book appointments, and manage bookings online. The platform also provides an admin dashboard to manage doctors and appointments efficiently. It is built using the MERN Stack (MongoDB, Express.js, React.js, Node.js).
 
