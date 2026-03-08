@@ -226,81 +226,44 @@ npm run dev
 
 ## Project Screenshots
 
-🗂 Cars
+🗂 👨‍⚕️ Doctors Page
 
-This page displays all available cars for rent in a card-based layout. Each card shows important details such as
-* Car brand and model
-* Rental price per day
-* Seating capacity
-* Transmission type
-* Fuel type
-* Location
+The Doctors page lists all available medical specialists with their profile, specialization, and experience. Users can search doctors and easily book appointments.
 <p align="center">
-  <img src="./client/public/cars.png" alt="Car Rental Homepage Screenshot" width="800"/>
-</p
-
-🛒 My-Booking
-
-The My Bookings page allows users to track all their reservations. It shows:
-* Booking ID
-* Rental period
-* Pickup location
-* Booking status (Pending / Confirmed / Cancelled)
-* Total price
-  This helps users easily manage and review their bookings.
-<p align="center">
-  <img src="./client/public/My-Booking.png" alt="Car Rental Homepage Screenshot" width="800"/>
+  <img src="./frontend/public/Doctors.png" alt="Medicare Homepage Screenshot" width="900"/>
 </p>
 
-🛍 Admin-Dashboard
 
-The Admin Dashboard provides an overview of the platform's activity including:
-* Total number of cars
-* Total bookings
-* Pending requests
-* Confirmed bookings
-* Recent booking activities
-* Monthly revenue
-It helps administrators monitor platform performance efficiently.
+🧪  Services
+
+The Services page displays available diagnostic services such as blood pressure tests, X-ray scans, eye check-ups, and blood sugar tests. Patients can book medical services directly from this page.
 <p align="center">
-  <img src="./client/public/Admin Dashboad.png" alt="Car Rental Homepage Screenshot" width="800"/>
+  <img src="./frontend/public/Services.png" alt="Medicare Homepage Screenshot" width="900"/>
+</p>
+
+📞 Contact Page
+
+The Contact page allows patients to connect with the clinic by filling out a form. Users can send their queries directly via WhatsApp and also view the clinic location using an integrated Google Map.
+<p align="center">
+  <img src="./frontend/public/Contact.png" alt="Medicare Homepage Screenshot" width="900"/>
 </p>
 
 
 
-➕ Add New Car
+📅 Doctor Appointments
 
-Admins can add new vehicles to the platform by filling in detailed information such as:
-* Brand and model
-* Year of manufacture
-* Daily rental price
-* Transmission type
-* Fuel type
-* Seating capacity
-* Location
-* Vehicle description
-* Car image upload
-This ensures that all necessary vehicle details are available for customers.
+This page allows users to view and manage their booked doctor appointments. It displays appointment details such as doctor name, date, time, payment method, and booking status.
 <p align="center">
-  <img src="./client/public/Add Car.png" alt="Car Rental Homepage Screenshot" width="800"/>
+  <img src="./frontend/public/Appointments.png" alt="Medicare Homepage Screenshot" width="900"/>
 </p>
 
 
-📋 Manage Bookings
+🧑‍💼 Admin Dashboard
 
-The Manage Bookings section allows administrators to control all customer reservations. Admins can:
-* View all booking records
-* Check payment status
-* Approve or cancel bookings
-* Update booking status
-This functionality ensures smooth booking management for the platform.
+The Admin Dashboard provides an overview of the platform including total doctors, registered users, appointments, earnings, and booking status. Administrators can monitor doctor performance and manage appointments from a centralized interface.
 <p align="center">
-  <img src="./client/public/Managed-Booking.png" alt="Car Rental Homepage Screenshot" width="800"/>
+  <img src="./frontend/public/Admin-Dashboard.png" alt="Medicare Homepage Screenshot" width="900"/>
 </p>
+
 
 ---
-
-## 🏁 Conclusion
-
-**CarRental** is a production-style vehicle booking platform built with the MERN stack, featuring user authentication, car management, booking functionality, and secure backend APIs.
-
