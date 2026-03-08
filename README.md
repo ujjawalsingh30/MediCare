@@ -25,19 +25,19 @@ Medicare is a full-stack healthcare web application that allows patients to sear
 * View and manage appointment history
 * Responsive and user-friendly UI
   
-### 🛍 Product Management
-- Product Listing
-- Product Images Upload
-- Cloudinary Media Storage
-- Stock & Price Handling
+### 🧑‍💼 Admin Features
+* Admin dashboard
+* Add / remove doctors
+* Manage appointments
+* View patient bookings
+* Monitor platform activity
 
-### 🔐 Security & Payments
-- Password Hashing with bcrypt
-- JWT-based Authentication
-- Secure Cookie Handling
-- Stripe Checkout Integration
-
-> GreenCart is built as a **real-world e-commerce system**, not a UI-only demo.
+### 💻 System Features
+* Secure authentication
+* RESTful API architecture
+* Responsive design
+* Image upload support
+* Real-time appointment management
 
 ---
 
@@ -78,47 +78,69 @@ Medicare is a full-stack healthcare web application that allows patients to sear
 
 ```
 
-carrental/
+MEDICARE
 │
-├── client/                     # Frontend (React + Vite)
-│   ├── node_modules/           # Project dependencies
-│   ├── public/                 # Static files
+├── admin                # Admin Panel (React + Vite)
+│   ├── node_modules
+│   ├── public
+│   ├── src
+│   │   ├── assets       # Images, icons, static files
+│   │   ├── components   # Reusable UI components
+│   │   ├── pages        # Admin pages (Dashboard, Doctors, Appointments)
+│   │   ├── App.jsx
+│   │   ├── index.css
+│   │   └── main.jsx
 │   │
-│   ├── src/                    # Main source folder
-│   │   ├── assets/             # Images, icons, and static assets
-│   │   ├── components/         # Reusable React components
-│   │   ├── context/            # Global state management (React Context)
-│   │   ├── pages/              # Application pages
-│   │   │
-│   │   ├── App.jsx             # Main App component
-│   │   ├── main.jsx            # React entry point
-│   │   └── index.css           # Global styles
-│   │
-│   ├── .env                    # Frontend environment variables
-│   ├── .gitignore              # Git ignored files
-│   ├── eslint.config.js        # ESLint configuration
-│   ├── index.html              # Root HTML file
-│   ├── package.json            # Frontend dependencies
-│   ├── README.md               # Frontend documentation
-│   ├── vercel.json             # Vercel deployment config
-│   └── vite.config.js          # Vite configuration
+│   ├── .env
+│   ├── .gitignore
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── README.md
+│   ├── vercel.json
+│   └── vite.config.js
 │
-├── server/                     # Backend (Node.js + Express)
-│   ├── configs/                # Database and external service configurations
-│   ├── controllers/            # Business logic for APIs
-│   ├── middleware/             # Authentication and custom middleware
-│   ├── models/                 # MongoDB schemas (Mongoose)
-│   ├── routes/                 # API route definitions
-│   ├── node_modules/           # Backend dependencies
+├── backend              # Node.js + Express Backend
+│   ├── config           # Database and cloud configuration
+│   ├── controllers      # Business logic
+│   ├── middlewares      # Authentication middleware
+│   ├── models           # MongoDB models
+│   ├── routes           # API routes
+│   ├── upload           # Uploaded images/files
+│   ├── utils            # Helper functions
 │   │
-│   ├── .env                    # Backend environment variables
-│   ├── .gitignore              # Git ignored files
-│   ├── package.json            # Backend dependencies
-│   ├── package-lock.json       # Dependency lock file
-│   └── server.js               # Main backend entry point
+│   ├── node_modules
+│   ├── .env
+│   ├── package.json
+│   ├── package-lock.json
+│   └── server.js
 │
-└── README.md                   # Project documentation
-
+├── frontend             # User Panel (React + Vite)
+│   ├── node_modules
+│   ├── public
+│   ├── src
+│   │   ├── assets       # Images and icons
+│   │   ├── components   # Reusable components
+│   │   ├── doctor       # Doctor related UI
+│   │   ├── pages        # User pages
+│   │   ├── App.jsx
+│   │   ├── index.css
+│   │   └── main.jsx
+│   │
+│   ├── VerifyPaymentPage.jsx
+│   ├── VerifyServicePaymentPage.jsx
+│   ├── .env
+│   ├── .gitignore
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── README.md
+│   ├── vercel.json
+│   └── vite.config.js
+│
+└── README.md
 ```
 
 ---
@@ -176,11 +198,11 @@ MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
 
 ##################################
-# ImageKit
+# Cloudinary
 ##################################
-IMAGEKIT_PUBLIC_KEY = your_imagekit_public_key
-IMAGEKIT_PRIVATE_KEY = your_imagekit_private_key
-IMAGEKIT_URL_ENDPOINT = your_imagekit_url_endpoint
+CLOUDINARY_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_SECRET_KEY=your_secret_key
 ##################################
 
 
@@ -191,6 +213,15 @@ IMAGEKIT_URL_ENDPOINT = your_imagekit_url_endpoint
 ---
 
 ## 🚀 Getting Started
+
+### Admin
+
+```
+cd Admin
+npm install
+npm run dev
+```
+
 
 ### Backend
 ```
@@ -206,17 +237,12 @@ npm install
 npm run dev
 ```
 
----
-
 ## 📈 Future Improvements
 
-- Admin Dashboard
-- Add new cars
-- Update car details
--Delete cars
-- View all bookings
-- Manage cars
-- Role-based Access (Admin / User)
+* Online payment integration
+* Doctor availability scheduling
+* Email appointment notifications
+* Mobile application support
 
 ---
 
