@@ -152,32 +152,10 @@ MEDICARE
 - JWT tokens stored in **HTTP-only cookies**
 - Protected routes using middleware
 
-### Cars Data
+### Doctors Data
 - Product data stored in MongoDB
 - Images uploaded using **Multer**
-- Media hosted on **ImageKit**
-
-
----
-
-## 👤 User APIs
-These APIs handle user registration, login, and user-related operations.
-| Method | Endpoint             | Description                |
-| ------ | -------------------- | -------------------------- |
-| POST   | `/api/user/register` | Register a new user        |
-| POST   | `/api/user/login`    | Login user                 |
-| GET    | `/api/user/profile`  | Get logged-in user profile |
-
-
-## 🚗 Owner APIs
-These APIs allow car owners/admins to manage cars in the system.
-
-| Method | Endpoint                    | Description                 |
-| ------ | --------------------------- | --------------------------- |
-| POST   | `/api/owner/add-car`        | Add a new car               |
-| GET    | `/api/owner/cars`           | Get all cars added by owner |
-| PUT    | `/api/owner/update-car/:id` | Update car details          |
-| DELETE | `/api/owner/delete-car/:id` | Delete a car                |
+- Media hosted on **Cloudinary**
 
 ---
 
