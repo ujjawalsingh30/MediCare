@@ -9,10 +9,6 @@ Medicare is a full-stack healthcare web application that allows patients to sear
 
 <hr/>
 
-🌐 **Live Website:** https://car-rental-gamma-lime.vercel.app/
-
-📦 **Repository:** https://github.com/ujjawalsingh30/CarRental
-
 ---
 
 ## ✨ Features
