@@ -12,7 +12,7 @@ const STORAGE_KEY = "doctorToken_v1";
 const LoginPage = () => {
 
     // const API_BASE = 'http://localhost:4000';
-    const API_BASE = "https://medicarebackend-ujiq.onrender.com";
+    const API_BASE = "https://backendmedicare.onrender.com";
     const [formDate, setFormDate] = useState({ email: "", password: "" });
     const [busy, setBusy] = useState(false);
     const navigate = useNavigate();

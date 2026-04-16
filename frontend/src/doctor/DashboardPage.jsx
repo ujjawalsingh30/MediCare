@@ -11,7 +11,7 @@ import {
 import { dashboardStyles } from "../assets/dummyStyles";
 
 // const API_BASE = "http://localhost:4000";
-const API_BASE = "https://medicarebackend-ujiq.onrender.com";
+const API_BASE = "https://backendmedicare.onrender.com";
 
 // date with time
 function parseDateTime(date, time) {
