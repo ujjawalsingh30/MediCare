@@ -19,7 +19,8 @@ const port = 4000;
 
 const allowedOrigins = [
     "http://localhost:5173",
-    "http://localhost:5174"
+    "http://localhost:5174",
+    "https://medi-care-weld.vercel.app"
 ];
 
 // Middlewares
