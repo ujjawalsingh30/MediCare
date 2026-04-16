@@ -10,6 +10,10 @@ import appointementRouter from './routes/appointmentRouter.js';
 import serviceAppointmentRouter from './routes/serviceAppointmentRouter.js';
 
 
+import {setServers} from "node:dns/promises"
+setServers(["8.8.8.8", "8.8.4.4"])
+
+
 const app = express();
 const port = 4000;
 
