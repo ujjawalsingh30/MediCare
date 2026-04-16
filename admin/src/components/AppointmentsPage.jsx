@@ -2,7 +2,9 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { pageStyles, statusClasses, keyframesStyles } from '../assets/dummyStyles'
 import { Calendar, Search, BadgeIndianRupee } from 'lucide-react';
 
-const API_BASE = "http://localhost:4000";
+// const API_BASE = "http://localhost:4000";
+
+const API_BASE = "https://backendmedicare.onrender.com";
 
 
 // HELPERS FUNCTION

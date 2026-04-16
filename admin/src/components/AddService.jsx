@@ -4,7 +4,12 @@ import { addServiceStyles } from '../assets/dummyStyles'
 import { AlertTriangle, CheckCircle, Clock, XCircle, ImagePlus, Plus, Trash2, Calendar } from 'lucide-react';
 
 const AddService = ({ serviceId }) => {
-    const API_BASE = "http://localhost:4000";
+    // const API_BASE = "http://localhost:4000";
+
+
+    const API_BASE = "https://backendmedicare.onrender.com";
+
+    
 
     const fileRef = useRef(null);
     const [imagePreview, setImagePreview] = useState(null);

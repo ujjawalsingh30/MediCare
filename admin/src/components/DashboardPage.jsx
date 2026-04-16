@@ -3,7 +3,9 @@ import { dashboardStyles as s } from '../assets/dummyStyles';
 
 import { CheckCircle, Users, XCircle, UserRoundCheck, CalendarRange, BadgeIndianRupee, Search } from 'lucide-react';
 
-const API_BASE = 'http://localhost:4000';
+// const API_BASE = 'http://localhost:4000';
+
+const API_BASE = "https://backendmedicare.onrender.com";
 const PATIENT_COUNT_API = `${API_BASE}/api/appointments/patients/count`;
 
 //Helper Function
