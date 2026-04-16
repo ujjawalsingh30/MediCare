@@ -22,7 +22,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import { doctorDetailStyles } from "../assets/dummyStyles";
 
-const API_BASE = "http://localhost:4000";
+// const API_BASE = "http://localhost:4000";
+const API_BASE = "https://medicarebackend-ujiq.onrender.com";
 // this function will parse date into an object
 function getScheduleDates(schedule) {
     if (!schedule) return [];

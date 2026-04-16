@@ -4,7 +4,8 @@ import { useParams } from 'react-router-dom';
 import { Calendar, Search, X } from 'lucide-react';
 
 
-const API_BASE = "http://localhost:4000";
+// const API_BASE = "http://localhost:4000";
+const API_BASE = "https://medicarebackend-ujiq.onrender.com";
 
 //helper function similar to Dashboard page
 function parseDateTime(date, time) {

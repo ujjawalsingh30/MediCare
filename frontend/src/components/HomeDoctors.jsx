@@ -5,7 +5,8 @@ import { ChevronRight, Medal, MousePointer, MousePointer2Off } from 'lucide-reac
 
 
 const HomeDoctors = ({ previewCount = 8 }) => {
-    const API_BASE = 'http://localhost:4000';
+    // const API_BASE = 'http://localhost:4000';
+    const API_BASE = "https://medicarebackend-ujiq.onrender.com";
     const [doctors, setDoctors] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
